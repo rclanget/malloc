@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 11:38:10 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/20 13:31:31 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/20 18:18:30 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ t_block	*insert_block_in_page(t_page *page, size_t size)
 	block = (t_block *)((void *)page + (page_len - page->free_mem));
 	block->size = size;
 	block->is_free = 0;
+	block->parent_page = page;
 	block->next = page->block_list;
 	block->prev = 0;
 	if (page->block_list)
@@ -92,16 +93,31 @@ void	add_page(t_page *page)
 	if (page->size == TINY)
 	{
 		page->next = g_main_struct->tiny_page;
+		if (g_main_struct->tiny_page)
+		{
+			g_main_struct->tiny_page->prev = page;
+			page->prev = g_main_struct->tiny_page->prev;
+		}
 		g_main_struct->tiny_page = page;
 	}
 	else if (page->size == SMALL)
 	{
 		page->next = g_main_struct->small_page;
+		if (g_main_struct->small_page)
+		{
+			g_main_struct->small_page->prev = page;
+			page->prev = g_main_struct->small_page->prev;
+		}
 		g_main_struct->small_page = page;
 	}
 	else if (page->size == LARGE)
 	{
 		page->next = g_main_struct->large_page;
+		if (g_main_struct->large_page)
+		{
+			g_main_struct->large_page->prev = page;
+			g_main_struct->large_page = page;
+		}
 		g_main_struct->large_page = page;
 	}
 }
@@ -151,6 +167,7 @@ t_page	*get_new_page(size_t size)
 		new_page->size = get_malloc_type(size);
 		new_page->block_list = 0;
 		new_page->next = 0;
+		new_page->prev = 0;
 		new_page->free_mem = (page_len - sizeof(t_page));
 		return (new_page);
 	}
@@ -193,7 +210,8 @@ t_block	*get_free_block_in_list(size_t size)
 }
 
 /*
-*		Alloue un nouveau block, et donc une nouvelle page aussi
+*		Vérifie s'il y a de la place dans la liste de block free OU à défault
+*		dans les pages TINY ET SMALL si concerné
 */
 t_block	*get_free_block(t_size type, size_t size)
 {
@@ -221,6 +239,74 @@ t_block	*get_free_block(t_size type, size_t size)
 	return (block);
 }
 
+void	add_free_block_to_list(t_block *block)
+{
+	t_block	*free_block_list;
+
+	if ((free_block_list = g_main_struct->free_block))
+	{
+		while (free_block_list->next)
+		{
+			if (free_block_list->size >= block->size)
+				break ;
+			free_block_list = free_block_list->next;
+		}
+		if (free_block_list->size < block->size)
+		{
+			free_block_list->next = block;
+			block->prev = free_block_list;
+		}
+		else
+		{
+			block->next = free_block_list;
+			block->prev = free_block_list->prev;
+			if (block->prev)
+				block->prev->next = block;
+			free_block_list->prev = block;
+		}
+	}
+	else
+		g_main_struct->free_block = block;
+}
+
+// void	*realloc(void *ptr, size_t size)
+// {
+//
+// }
+
+#include <errno.h>
+#include <string.h>
+void	free(void *ptr)
+{
+	t_block	*block_container;
+	t_page	*page_container;
+	size_t	page_len;
+
+	block_container = (t_block *)(ptr - sizeof(t_block));
+	page_container = block_container->parent_page;
+	block_container->is_free = 1;
+	page_container->free_mem += (block_container->size + sizeof(t_block));
+	page_len = get_page_size(block_container->size) + sizeof(t_page);
+	page_len = ROUNDUP(page_len);
+	if (page_container->free_mem == (page_len - sizeof(t_page)) && (page_container->next || page_container->prev))
+	{
+		// Si c'est la première page, on fait pointer g_main_struct->TYPE_PAGE sur la page suivante
+		if (!page_container->prev)
+		{
+			if (page_container->size == TINY)
+				g_main_struct->tiny_page = page_container->next;
+			else if (page_container->size == SMALL)
+				g_main_struct->small_page = page_container->next;
+			else if (page_container->size == LARGE)
+				g_main_struct->large_page = page_container->next;
+		}
+		if (munmap(page_container, page_len) == -1)
+			printf("ERROR MUNMAP: %s\ngetpagesize: %d\n", strerror(errno), getpagesize());
+	}
+	else
+		add_free_block_to_list(block_container);
+}
+
 void	*malloc(size_t size)
 {
 	t_block	*block;
@@ -237,7 +323,7 @@ void	*malloc(size_t size)
 			if (!(block = get_new_block(size)))
 				return (0);
 		}
-		return ((void*)(block));
+		return ((void*)(block) + sizeof(t_block));
 	}
 	return (0);
 }
@@ -297,12 +383,25 @@ int main(void)
 	// print_page();
 	// *str = (char *)malloc(sizeof(char) * 1024);
 	// print_page();
+
+	// ------- Test 1 -----------
 	int i = 0;
-	while (i < 1024)
+	while (i < 128)
 	{
-		malloc(1024);
+		malloc(87);
 		i++;
 	}
 	print_page();
+
+	// ------- Test free -----------
+	char *str;
+
+	str = (char *)malloc(8);
+	str[0] = 'c';
+	str[1] = 0;
+	printf("%s\n", str);
+	free(str);
+	str[0] = 'a';
+	printf("%s\n", str);
 	return (0);
 }

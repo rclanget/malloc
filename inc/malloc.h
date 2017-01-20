@@ -4,10 +4,13 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 
+struct				s_page;
+
 typedef struct		s_block
 {
 	size_t			size;
 	int				is_free;
+	struct s_page	*parent_page;
 	struct s_block	*next;
 	struct s_block	*prev;
 }					t_block;
@@ -25,6 +28,7 @@ typedef struct		s_page
 	size_t			free_mem;
 	t_block			*block_list;
 	struct s_page	*next;
+	struct s_page	*prev;
 }					t_page;
 
 typedef struct		s_main
