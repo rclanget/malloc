@@ -1,0 +1,2 @@
+fonction free: libère la mémoire ET ajoute les blocks free à g_main_struct->free_block (dans l'ordre croissant)
+fonctione realloc: alloue un nouveau block memoire et free l'ancien
