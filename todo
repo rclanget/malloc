@@ -1,11 +1,4 @@
 todo:
-	fonction free: libère la mémoire ET ajoute les blocks free à g_main_struct->free_block (dans l'ordre croissant)
-		si c'est un tiny ou small alors mettre le block à free ET regarder SI la page est vide
-																			SI la page est vide et quelle n'est pas seul
-																				ALORS munmap la page ET SI c'est la premiere page
-																					ALORS faire pointer g_main_struct->page sur la page suivante
-																			SINON ajouter block_free à g_main_struct->free_block
-
 	fonction realloc: alloue un nouveau block memoire et free l'ancien
 	fusion de blocks libre contigu SI pas de free_block assez grand
 

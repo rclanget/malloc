@@ -13,6 +13,8 @@ typedef struct		s_block
 	struct s_page	*parent_page;
 	struct s_block	*next;
 	struct s_block	*prev;
+	struct s_block	*free_next;
+	struct s_block	*free_prev;
 }					t_block;
 
 typedef enum		e_size
