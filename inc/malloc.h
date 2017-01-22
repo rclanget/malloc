@@ -1,8 +1,14 @@
 #ifndef MALLOC_H
 # define MALLOC_H
 
-#include <stdlib.h>
-#include <sys/mman.h>
+#include <stdio.h>
+
+#define GETPAGESIZE		(getpagesize())
+#define ROUNDUP(x)		(((x + GETPAGESIZE - 1) / GETPAGESIZE) * GETPAGESIZE)
+
+# define OFFSETOF(type, member) ((size_t) &((type *)0)->member)
+# define CONTAINEROF(ptr, t, m) ((t *)((char *)(ptr) - OFFSETOF(t, m)))
+
 
 struct				s_page;
 
@@ -26,7 +32,8 @@ typedef enum		e_size
 
 typedef struct		s_page
 {
-	t_size			size;
+	t_size			type;
+	size_t			size;
 	size_t			free_mem;
 	t_block			*block_list;
 	struct s_page	*next;
@@ -35,14 +42,20 @@ typedef struct		s_page
 
 typedef struct		s_main
 {
-	t_page			*tiny_page;
-	t_page			*small_page;
-	t_page			*large_page;
+	int				init;
+	t_page			*page;
 	t_block			*free_block;
 }					t_main;
+
+t_main				*g_main_struct;
 
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
 void				free(void *ptr);
+size_t				get_page_size(size_t size);
+t_page				**get_head_page_type(t_size type);
+
+void				*ft_memcpy(void *dest, const void *src, size_t n);
+void				ft_bzero(void *s, size_t n);
 
 #endif
