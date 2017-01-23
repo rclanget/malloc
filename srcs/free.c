@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 00:37:34 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/23 03:00:03 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 #include <sys/mman.h>
 
 #include <errno.h>
-#include <stdio.h>
 
-void	add_free_block_to_list(t_block *block)
+static void	add_free_block_to_list(t_block *block)
 {
 	t_block	*free_block_list;
 
@@ -51,7 +50,7 @@ void	add_free_block_to_list(t_block *block)
 	}
 }
 
-void	free_page(t_page *page)
+static void	free_page(t_page *page)
 {
 	if (page->next)
 		page->next->prev = page->prev;

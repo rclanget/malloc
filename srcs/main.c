@@ -77,8 +77,11 @@ int main(void)
 	//
 	// // -------- Test realloc ---------
 	char *str;
+	char *tmp;
 
-	str = (char *)malloc(700);
-	str = (char *)realloc(str, 1024);
+	str = (char *)malloc(200);
+	tmp = (char *)malloc(200);
+	free(tmp);
+	str = (char *)realloc(str, 400);
 	return (0);
 }

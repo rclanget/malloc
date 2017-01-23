@@ -55,6 +55,13 @@ void				free(void *ptr);
 size_t				get_page_size(size_t size);
 t_page				**get_head_page_type(t_size type);
 
+void				add_page(t_page *page);
+size_t				get_page_size(size_t size);
+t_page				*get_new_page(size_t size);
+
+t_block				*insert_block_in_page(t_page *page, size_t size);
+t_block				*get_new_block(size_t size);
+
 void				*ft_memcpy(void *dest, const void *src, size_t n);
 void				ft_bzero(void *s, size_t n);
 
