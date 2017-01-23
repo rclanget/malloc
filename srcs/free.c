@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 12:15:11 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 00:08:08 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,19 @@ static int	is_page_empty(t_page *page)
 	return (page->size == page->free_mem);
 }
 
+void	ft_error(char *error_msg)
+{
+	printf("%s\n", error_msg);
+}
+
 void	free(void *ptr)
 {
 	t_block	*block_container;
 
-	if (ptr)
+	pthread_mutex_lock(&g_malloc_lock);
+	if (ptr && check_adress(ptr))
 	{
-		block_container = (t_block *)(ptr - sizeof(t_block));
+		block_container = (ptr - sizeof(t_block));
 		block_container->is_free = 1;
 		block_container->parent_page->free_mem += (block_container->size + sizeof(t_block));
 		if (is_page_empty(block_container->parent_page) &&
@@ -82,4 +88,7 @@ void	free(void *ptr)
 		else
 			add_free_block_to_list(block_container);
 	}
+	else
+		ft_error("*** Error: free(): invalid pointer  ***");
+	pthread_mutex_unlock(&g_malloc_lock);
 }

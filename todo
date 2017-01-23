@@ -1,5 +1,4 @@
 todo:
-	faire les deux fonctions d'affichage de la mémoire
 	protéger contre le multi thread
 	faire les tests
 	clean le code et redécouper les fichiers

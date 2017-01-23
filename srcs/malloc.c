@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 11:38:10 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 12:52:50 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 00:08:02 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,7 @@ t_block	*get_free_block(t_size type, size_t size)
 			tmp = tmp->next;
 		}
 		if (tmp)
-		{
 			block = insert_block_in_page(tmp, size);
-		}
 	}
 	return (block);
 }
@@ -103,11 +101,16 @@ void	*malloc(size_t size)
 	init_main_struct();
 	if ((malloc_type = get_malloc_type(size)))
 	{
+		pthread_mutex_lock(&g_malloc_lock);
 		if ((size > SMALL_SIZE) || !(block = get_free_block(malloc_type, size)))
 		{
 			if (!(block = get_new_block(size)))
+			{
+				pthread_mutex_unlock(&g_malloc_lock);
 				return (0);
+			}
 		}
+		pthread_mutex_unlock(&g_malloc_lock);
 		return ((void*)(block) + sizeof(t_block));
 	}
 	return (0);

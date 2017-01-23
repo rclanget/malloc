@@ -2,6 +2,7 @@
 # define MALLOC_H
 
 #include <stdio.h>
+#include <pthread.h>
 
 # define GETPAGESIZE			(getpagesize())
 # define ROUNDUP(x)				(((x + GETPAGESIZE - 1) / GETPAGESIZE) * GETPAGESIZE)
@@ -50,6 +51,7 @@ typedef struct		s_main
 }					t_main;
 
 t_main				*g_main_struct;
+pthread_mutex_t 	g_malloc_lock;
 
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
@@ -65,6 +67,8 @@ t_page				*get_new_page(size_t size);
 
 t_block				*insert_block_in_page(t_page *page, size_t size);
 t_block				*get_new_block(size_t size);
+
+int					check_adress(void *adress);
 
 void				*ft_memcpy(void *dest, const void *src, size_t n);
 void				ft_bzero(void *s, size_t n);

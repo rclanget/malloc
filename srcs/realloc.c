@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:36:41 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 16:09:19 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 00:08:04 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,26 @@ void			*realloc(void *ptr, size_t size)
 	t_block		*tmp;
 	t_page		*page;
 
-	if (!ptr)
+	if (ptr == 0)
 		return (malloc(size));
 	if (size)
 	{
-		block = (t_block *)(ptr - sizeof(t_block));
-		while ((block->size <= size) && (tmp = buddy_block(block)))
-			block = fusion_block(block, tmp);
-		if (block->size <= size && (tmp = malloc(size)))
+		pthread_mutex_lock(&g_malloc_lock);
+		if (check_adress(ptr))
 		{
-			tmp = (tmp - sizeof(t_block));
-			ft_memcpy(tmp, (block + sizeof(t_block)), block->size);
-			if (block->next)
-				block->next->prev = block->prev;
-			if (block->prev)
-				block->prev->next = block->next;
-			else if ((page = CONTAINEROF(block, t_page, block_list)))
-				page->block_list = block->next;
-			free((void *)block + sizeof(t_block));
-			block = tmp;
+			block = (t_block *)(ptr - sizeof(t_block));
+			while ((block->size <= size) && (tmp = buddy_block(block)))
+				block = fusion_block(block, tmp);
+			if (block->size <= size && (tmp = malloc(size)))
+			{
+				ft_memcpy(tmp, ((void *)block + sizeof(t_block)), block->size);
+				free(((void *)block + sizeof(t_block)));
+				block = (tmp);
+			}
+			pthread_mutex_unlock(&g_malloc_lock);
+			return ((void *)block + sizeof(t_block));
 		}
-		return ((void *)block + sizeof(t_block));
+		pthread_mutex_unlock(&g_malloc_lock);
 	}
 	else
 		free(ptr);
