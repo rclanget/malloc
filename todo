@@ -1,8 +1,5 @@
 todo:
-	fonction realloc: alloue un nouveau block memoire et free l'ancien
-	fusion de blocks libre contigu SI pas de free_block assez grand
-
-bonus:
-	garbage collector
-	affichage de l'état de la mémoire
+	faire les deux fonctions d'affichage de la mémoire
 	protéger contre le multi thread
+	faire les tests
+	clean le code et redécouper les fichiers
