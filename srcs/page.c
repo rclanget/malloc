@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:44:04 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 02:59:38 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/23 12:26:02 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ void	add_page(t_page *page)
 
 size_t	get_page_size(size_t size)
 {
-	if (size <= 128)
-		return (128 * 100);
-	else if (size > 128 && size <= 1024)
-		return (1024 * 50);
+	if (size <= TINY_SIZE)
+		return (TINY_SIZE * 100);
+	else if (size > TINY_SIZE && size <= SMALL_SIZE)
+		return (SMALL_SIZE * 50);
 	else
 		return (size);
 }
@@ -47,7 +47,7 @@ t_page	*get_new_page(size_t size)
 
 	page_len = get_page_size(size) + sizeof(t_page);
 	page_len = ROUNDUP(page_len);
-	if ((buf = mmap(NULL, page_len, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0)) != (void *)-1)
+	if ((buf = mmap(0, page_len, MMAP_FLAG, -1, 0)) != (void *)-1)
 	{
 		new_page = (t_page *)buf;
 		ft_bzero(new_page, page_len);

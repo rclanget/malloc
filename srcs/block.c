@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:40:54 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 02:59:54 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/23 15:26:48 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ t_block	*insert_block_in_page(t_page *page, size_t size)
 	ft_bzero(block, sizeof(t_block));
 	block->size = size;
 	block->parent_page = page;
-	block->next = page->block_list;
-	if (page->block_list)
+	if ((block->next = page->block_list))
 		page->block_list->prev = block;
 	page->block_list = block;
 	page->free_mem -= (size + sizeof(t_block));

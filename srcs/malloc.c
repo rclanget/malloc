@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 11:38:10 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 03:00:32 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/23 12:52:50 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void init_main_struct(void)
 
 	if (g_main_struct)
 		return ;
-	if ((buf = mmap(NULL, sizeof(g_main_struct), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0)) != (void *)-1)
+	if ((buf = mmap(0, sizeof(g_main_struct), MMAP_FLAG, -1, 0)) != (void *)-1)
 	{
 		g_main_struct = (t_main *)buf;
 		ft_bzero(g_main_struct, sizeof(t_main));
@@ -32,11 +32,11 @@ static void init_main_struct(void)
 
 t_size	get_malloc_type(size_t size)
 {
-	if (size > 0 && size <= 128)
+	if (size > 0 && size <= TINY_SIZE)
 		return (TINY);
-	else if (size > 128 && size <= 1024)
+	else if (size > TINY_SIZE && size <= SMALL_SIZE)
 		return (SMALL);
-	else if (size > 1024)
+	else if (size > SMALL_SIZE)
 		return (LARGE);
 	else
 		return (0);
@@ -103,7 +103,7 @@ void	*malloc(size_t size)
 	init_main_struct();
 	if ((malloc_type = get_malloc_type(size)))
 	{
-		if ((size > 1024) || !(block = get_free_block(malloc_type, size)))
+		if ((size > SMALL_SIZE) || !(block = get_free_block(malloc_type, size)))
 		{
 			if (!(block = get_new_block(size)))
 				return (0);

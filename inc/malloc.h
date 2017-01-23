@@ -3,12 +3,14 @@
 
 #include <stdio.h>
 
-#define GETPAGESIZE		(getpagesize())
-#define ROUNDUP(x)		(((x + GETPAGESIZE - 1) / GETPAGESIZE) * GETPAGESIZE)
+# define GETPAGESIZE			(getpagesize())
+# define ROUNDUP(x)				(((x + GETPAGESIZE - 1) / GETPAGESIZE) * GETPAGESIZE)
+# define MMAP_FLAG				PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON
+# define OFFSETOF(type, member)	((size_t) &((type *)0)->member)
+# define CONTAINEROF(ptr, t, m)	((t *)((char *)(ptr) - OFFSETOF(t, m)))
 
-# define OFFSETOF(type, member) ((size_t) &((type *)0)->member)
-# define CONTAINEROF(ptr, t, m) ((t *)((char *)(ptr) - OFFSETOF(t, m)))
-
+# define TINY_SIZE				128
+# define SMALL_SIZE				1024
 
 struct				s_page;
 
@@ -52,6 +54,8 @@ t_main				*g_main_struct;
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
 void				free(void *ptr);
+void				show_alloc_mem(void);
+
 size_t				get_page_size(size_t size);
 t_page				**get_head_page_type(t_size type);
 

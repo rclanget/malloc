@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 03:00:03 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/23 12:15:11 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	free_page(t_page *page)
 		printf("ERROR MUNMAP: %s\ngetpagesize: %d\n", strerror(errno), getpagesize());
 }
 
-int		is_page_empty(t_page *page)
+static int	is_page_empty(t_page *page)
 {
 	return (page->size == page->free_mem);
 }
