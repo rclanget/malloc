@@ -6,13 +6,13 @@
 #    By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/08 20:12:26 by rclanget          #+#    #+#              #
-#    Updated: 2017/01/24 14:00:58 by zipo             ###   ########.fr        #
+#    Updated: 2017/01/24 14:32:38 by zipo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	test
 
-IDIR		=	-I inc/ -I../includes/
+IDIR		=	-I inc/ -I../inc/
 
 SRC_PATH	=	test_src/
 SRC_NAME	= 	test1.c
