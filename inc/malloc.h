@@ -78,4 +78,6 @@ void							ft_print(const char *fmt, ...);
 void							*ft_memcpy(void *dest, const void *src, size_t n);
 void							ft_bzero(void *s, size_t n);
 
+void init_main_struct(void);
+t_block		*get_free_block_in_list(size_t size);
 #endif

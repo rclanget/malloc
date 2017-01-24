@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 11:38:10 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 02:19:44 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 18:30:00 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
-static void init_main_struct(void)
+void 		init_main_struct(void)
 {
 	void 	*buf;
 
