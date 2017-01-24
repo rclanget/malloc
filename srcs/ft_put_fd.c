@@ -6,9 +6,11 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 01:59:12 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 02:26:21 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 02:39:52 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <unistd.h>
 
 void	ft_putchar_fd(char c, int fd)
 {
@@ -21,7 +23,7 @@ void	ft_putstr_fd(char *str, int fd)
 
 	i = 0;
 	while (str[i])
-		ft_putchar_fd(str[i++], 2);
+		ft_putchar_fd(str[i++], fd);
 }
 
 void	ft_putnbr_fd(int n, int fd)

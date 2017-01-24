@@ -6,14 +6,14 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:44:04 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 02:20:21 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 02:41:42 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-
 #include <sys/resource.h>
 #include <sys/mman.h>
+#include <unistd.h>
 
 void	add_page(t_page *page)
 {

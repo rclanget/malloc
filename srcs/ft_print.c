@@ -6,11 +6,12 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 01:56:30 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 02:04:02 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 02:40:25 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
+#include <unistd.h>
 #include <stdarg.h>
 
 void	print_arg(va_list ap, const char *fmt, int fd)
