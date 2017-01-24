@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:36:41 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 02:25:49 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 19:09:10 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ void			*realloc(void *ptr, size_t size)
 	{
 		while ((block->size <= size) && (tmp = buddy_block(block)))
 			block = fusion_block(block, tmp);
-		if (block->size <= size && (tmp = malloc(size)))
+		if (block->size < size && (tmp = malloc(size)))
 		{
 			ft_memcpy(tmp, ((void *)block + sizeof(t_block)), block->size);
 			free(((void *)block + sizeof(t_block)));
-			block = (tmp);
+			block = ((void *)tmp - sizeof(t_block));
 		}
 		pthread_mutex_unlock(&g_malloc_lock);
 		return ((void *)block + sizeof(t_block));
