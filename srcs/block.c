@@ -6,24 +6,24 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:40:54 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/23 15:26:48 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 02:18:04 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_block	*insert_block_in_page(t_page *page, size_t size)
+t_block	*insert_block_in_page(t_page *p, size_t size)
 {
 	t_block	*block;
 
-	block = (t_block *)((void *)page + (page->size - page->free_mem) + sizeof(t_page));
+	block = (t_block *)((void *)p + (p->size - p->free_mem) + sizeof(t_page));
 	ft_bzero(block, sizeof(t_block));
 	block->size = size;
-	block->parent_page = page;
-	if ((block->next = page->block_list))
-		page->block_list->prev = block;
-	page->block_list = block;
-	page->free_mem -= (size + sizeof(t_block));
+	block->parent_page = p;
+	if ((block->next = p->block_list))
+		p->block_list->prev = block;
+	p->block_list = block;
+	p->free_mem -= (size + sizeof(t_block));
 	return (block);
 }
 

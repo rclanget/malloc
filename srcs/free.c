@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 00:08:08 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 01:58:14 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,31 @@
 #include <string.h>
 #include <sys/mman.h>
 
-#include <errno.h>
+# define IS_PAGE_EMPTY(x) (x->size == x->free_mem)
+
+void		add_before(t_block *list, t_block *new)
+{
+	t_block *tmp;
+
+	if ((tmp = list->free_prev))
+		tmp->free_next = new;
+	list->free_prev = new;
+	new->free_next = list;
+	new->free_prev = tmp;
+	if (!tmp)
+		g_main_struct->free_block = new;
+}
+
+void		add_after(t_block *list, t_block *new)
+{
+	t_block *tmp;
+
+	tmp = list->free_next;
+	list->free_next = new;
+	new->free_prev = list;
+	if ((new->free_next = tmp))
+		tmp->free_prev = new;
+}
 
 static void	add_free_block_to_list(t_block *block)
 {
@@ -22,32 +46,19 @@ static void	add_free_block_to_list(t_block *block)
 
 	if ((free_block_list = g_main_struct->free_block))
 	{
-		if (free_block_list->size > block->size)
+		while (free_block_list->free_next)
 		{
-			block->free_next = free_block_list;
-			free_block_list->free_prev = block;
-			g_main_struct->free_block = block;
+			if (free_block_list->size >= block->size)
+				break ;
+			free_block_list = free_block_list->free_next;
 		}
+		if (free_block_list->size >= block->size)
+			add_before(free_block_list, block);
 		else
-		{
-			while (free_block_list->free_next)
-			{
-				if (free_block_list->free_next->size >= block->size)
-					break;
-				free_block_list = free_block_list->free_next;
-			}
-			block->free_next = free_block_list->free_next;
-			block->free_prev = block;
-			free_block_list->free_next = block;
-			block->free_prev = free_block_list;
-		}
+			add_after(free_block_list, block);
 	}
 	else
-	{
 		g_main_struct->free_block = block;
-		block->free_prev = 0;
-		block->free_next = 0;
-	}
 }
 
 static void	free_page(t_page *page)
@@ -59,36 +70,27 @@ static void	free_page(t_page *page)
 	else
 		g_main_struct->page = page->next;
 	if (munmap(page, page->size + sizeof(t_page)) == -1)
-		printf("ERROR MUNMAP: %s\ngetpagesize: %d\n", strerror(errno), getpagesize());
-}
-
-static int	is_page_empty(t_page *page)
-{
-	return (page->size == page->free_mem);
-}
-
-void	ft_error(char *error_msg)
-{
-	printf("%s\n", error_msg);
+		ft_fdprint(2, "Error: munmap\n");
 }
 
 void	free(void *ptr)
 {
-	t_block	*block_container;
+	t_block	*container;
 
 	pthread_mutex_lock(&g_malloc_lock);
 	if (ptr && check_adress(ptr))
 	{
-		block_container = (ptr - sizeof(t_block));
-		block_container->is_free = 1;
-		block_container->parent_page->free_mem += (block_container->size + sizeof(t_block));
-		if (is_page_empty(block_container->parent_page) &&
-			(block_container->parent_page->type == LARGE || (block_container->parent_page->next || block_container->parent_page->prev)))
-			free_page(block_container->parent_page);
+		container = (ptr - sizeof(t_block));
+		container->is_free = 1;
+		container->parent_page->free_mem += (container->size + sizeof(t_block));
+		if (IS_PAGE_EMPTY(container->parent_page) &&
+			(container->parent_page->type == LARGE ||
+			(container->parent_page->next || container->parent_page->prev)))
+			free_page(container->parent_page);
 		else
-			add_free_block_to_list(block_container);
+			add_free_block_to_list(container);
 	}
 	else
-		ft_error("*** Error: free(): invalid pointer  ***");
+		ft_fdprint(2, "*** Error: free(): invalid pointer  ***\n");
 	pthread_mutex_unlock(&g_malloc_lock);
 }

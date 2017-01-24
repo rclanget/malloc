@@ -6,19 +6,18 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 11:38:10 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 00:08:02 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 02:19:44 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-
 #include <sys/resource.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
 static void init_main_struct(void)
 {
-	void *buf;
+	void 	*buf;
 
 	if (g_main_struct)
 		return ;
@@ -30,7 +29,7 @@ static void init_main_struct(void)
 	}
 }
 
-t_size	get_malloc_type(size_t size)
+t_size		get_malloc_type(size_t size)
 {
 	if (size > 0 && size <= TINY_SIZE)
 		return (TINY);
@@ -42,19 +41,16 @@ t_size	get_malloc_type(size_t size)
 		return (0);
 }
 
-t_block	*get_free_block_in_list(size_t size)
+t_block		*get_free_block_in_list(size_t size)
 {
 	t_block	*tmp;
 
 	tmp = g_main_struct->free_block;
-	int i = 0;
 	while (tmp)
 	{
 		if (tmp->size >= size)
 			break ;
 		tmp = tmp->free_next;
-		if (i++ > 3)
-			break ;
 	}
 	if (tmp)
 	{
@@ -75,20 +71,20 @@ t_block	*get_free_block_in_list(size_t size)
 t_block	*get_free_block(t_size type, size_t size)
 {
 	t_block	*block;
-	t_page	*tmp;
+	t_page	*p;
 
 	block = NULL;
-	tmp = g_main_struct->page;
+	p = g_main_struct->page;
 	if (!(block = get_free_block_in_list(size)))
 	{
-		while (tmp)
+		while (p)
 		{
-			if ((tmp->type == type) && tmp->free_mem >= (size + sizeof(t_block)))
+			if ((p->type == type) && p->free_mem >= (size + sizeof(t_block)))
 				break ;
-			tmp = tmp->next;
+			p = p->next;
 		}
-		if (tmp)
-			block = insert_block_in_page(tmp, size);
+		if (p)
+			block = insert_block_in_page(p, size);
 	}
 	return (block);
 }

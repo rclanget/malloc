@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:36:41 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 00:08:04 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/24 02:25:49 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,25 @@ void			*realloc(void *ptr, size_t size)
 {
 	t_block		*block;
 	t_block		*tmp;
-	t_page		*page;
 
 	if (ptr == 0)
 		return (malloc(size));
-	if (size)
+	if (!size)
+		free(ptr);
+	pthread_mutex_lock(&g_malloc_lock);
+	if (check_adress(ptr) && (block = (t_block *)(ptr - sizeof(t_block))))
 	{
-		pthread_mutex_lock(&g_malloc_lock);
-		if (check_adress(ptr))
+		while ((block->size <= size) && (tmp = buddy_block(block)))
+			block = fusion_block(block, tmp);
+		if (block->size <= size && (tmp = malloc(size)))
 		{
-			block = (t_block *)(ptr - sizeof(t_block));
-			while ((block->size <= size) && (tmp = buddy_block(block)))
-				block = fusion_block(block, tmp);
-			if (block->size <= size && (tmp = malloc(size)))
-			{
-				ft_memcpy(tmp, ((void *)block + sizeof(t_block)), block->size);
-				free(((void *)block + sizeof(t_block)));
-				block = (tmp);
-			}
-			pthread_mutex_unlock(&g_malloc_lock);
-			return ((void *)block + sizeof(t_block));
+			ft_memcpy(tmp, ((void *)block + sizeof(t_block)), block->size);
+			free(((void *)block + sizeof(t_block)));
+			block = (tmp);
 		}
 		pthread_mutex_unlock(&g_malloc_lock);
+		return ((void *)block + sizeof(t_block));
 	}
-	else
-		free(ptr);
+	pthread_mutex_unlock(&g_malloc_lock);
 	return (0);
 }
