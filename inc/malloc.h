@@ -57,6 +57,7 @@ void							*realloc(void *ptr, size_t size);
 void							free(void *ptr);
 void							show_alloc_mem(void);
 
+t_size							get_malloc_type(size_t size);
 size_t							get_page_size(size_t size);
 t_page							**get_head_page_type(t_size type);
 
