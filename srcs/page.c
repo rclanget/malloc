@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:44:04 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/25 02:35:39 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 15:31:15 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	add_page(t_page *page)
 size_t	get_page_size(size_t size)
 {
 	if (size <= TINY_SIZE)
-		return (TINY_SIZE * 100);
+		return ((TINY_SIZE + sizeof(t_block)) * 100);
 	else if (size > TINY_SIZE && size <= SMALL_SIZE)
-		return (SMALL_SIZE * 50);
+		return ((SMALL_SIZE + sizeof(t_block)) * 50);
 	else
-		return (size);
+		return (size + sizeof(t_block));
 }
 
 t_page	*get_new_page(size_t size)

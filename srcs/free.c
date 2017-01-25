@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/25 02:32:26 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 20:11:42 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <string.h>
 #include <sys/mman.h>
 
+#include <stdio.h>
 # define IS_PAGE_EMPTY(x) (x->size == x->free_mem)
 
 void		add_before(t_block *list, t_block *new)
@@ -31,25 +32,28 @@ void		add_before(t_block *list, t_block *new)
 void		add_after(t_block *list, t_block *new)
 {
 
+	printf("after\n");
 	if ((new->free_next = list->free_next))
 		list->free_next->free_prev = new;
 	list->free_next = new;
 	new->free_prev = list;
 }
 
-static void	add_free_block_to_list(t_block *block)
+void	add_free_block_to_list(t_block *block)
 {
 	t_block	*free_block_list;
 
 	if ((free_block_list = g_main_struct->free_block))
 	{
-		while (free_block_list->free_next)
+		while (free_block_list)
 		{
 			if (free_block_list->size >= block->size)
 			{
 				add_before(free_block_list, block);
 				return ;
 			}
+			if (!free_block_list->free_next)
+				break ;
 			free_block_list = free_block_list->free_next;
 		}
 		add_after(free_block_list, block);
@@ -58,7 +62,8 @@ static void	add_free_block_to_list(t_block *block)
 		g_main_struct->free_block = block;
 }
 
-static void	free_page(t_page *page)
+#include <stdio.h>
+void	free_page(t_page *page)
 {
 	if (page->next)
 		page->next->prev = page->prev;

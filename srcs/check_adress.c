@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 17:26:21 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 01:54:25 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 12:03:49 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_adress(void *adress)
 	t_block *block;
 
 	page = g_main_struct->page;
-	while (page)
+	while (adress && page)
 	{
 		block = page->block_list;
 		while (block)
