@@ -43,11 +43,14 @@ void	test_get_free_block_in_list(void)
 	reset_struct();
 }
 
-void	test_get_free_block(void)
+void	test_check_adress(void)
 {
 	// char *s;
 
 	init_main_struct();
+	// Vérifier s'il trouve une adresse mallocé
+	// Ne doit pas trouver adresse non malloc
+	// Voir avec realloc
 	reset_struct();
 }
 

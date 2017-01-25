@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 11:38:10 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 18:30:00 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 02:25:00 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,20 @@ t_block		*get_free_block_in_list(size_t size)
 	while (tmp)
 	{
 		if (tmp->size >= size)
+		{
+			tmp->parent_page->free_mem -= (tmp->size + sizeof(t_block));
+			if (tmp->free_next)
+				tmp->free_next->free_prev = tmp->free_prev;
+			if (tmp->free_prev)
+				tmp->free_prev->free_next = tmp->free_next;
+			else
+				g_main_struct->free_block = tmp->free_next;
+			tmp->free_next = 0;
+			tmp->free_prev = 0;
+			tmp->is_free = 0;
 			break ;
+		}
 		tmp = tmp->free_next;
-	}
-	if (tmp)
-	{
-		tmp->parent_page->free_mem -= (tmp->size + sizeof(t_block));
-		if (tmp->free_next)
-			tmp->free_next->free_prev = tmp->free_prev;
-		if (tmp->free_prev)
-			tmp->free_prev->free_next = tmp->free_next;
-		else
-			g_main_struct->free_block = tmp->free_next;
-		tmp->free_next = 0;
-		tmp->free_prev = 0;
-		tmp->is_free = 0;
 	}
 	return (tmp);
 }

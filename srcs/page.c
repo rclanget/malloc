@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 01:44:04 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 02:41:42 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 02:35:39 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	add_page(t_page *page)
 {
 	t_page *head;
 
-	head = g_main_struct->page;
-	if (head)
+	if ((head = g_main_struct->page))
 	{
 		page->next = head;
 		if (head->prev)

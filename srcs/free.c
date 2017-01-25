@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/25 01:49:30 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 02:32:26 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ static void	add_free_block_to_list(t_block *block)
 		while (free_block_list->free_next)
 		{
 			if (free_block_list->size >= block->size)
-				break ;
+			{
+				add_before(free_block_list, block);
+				return ;
+			}
 			free_block_list = free_block_list->free_next;
 		}
-		if (free_block_list->size >= block->size)
-			add_before(free_block_list, block);
-		else
-			add_after(free_block_list, block);
+		add_after(free_block_list, block);
 	}
 	else
 		g_main_struct->free_block = block;
@@ -91,6 +91,6 @@ void	free(void *ptr)
 		}
 	}
 	else
-		ft_fdprint(2, "*** Error: free(): invalid pointer  ***\n");
+		ft_fdprint(2, "Error: free(): invalid pointer\n");
 	pthread_mutex_unlock(&g_malloc_lock);
 }
