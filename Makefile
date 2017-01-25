@@ -6,7 +6,7 @@
 #    By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/08 20:12:26 by rclanget          #+#    #+#              #
-#    Updated: 2017/01/24 14:05:12 by zipo             ###   ########.fr        #
+#    Updated: 2017/01/24 23:24:57 by zipo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ IDIR		=	inc/
 
 SRC_PATH	=	srcs/
 SRC_NAME	=	block.c check_adress.c free.c ft_bzero.c ft_memcpy.c ft_print.c\
-				ft_put_fd.c malloc.c page.c realloc.c show_alloc_mem.c
+				ft_put_fd.c malloc.c page.c realloc.c show_alloc_mem.c\
+				defragment.c
 
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
 

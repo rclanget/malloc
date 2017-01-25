@@ -56,20 +56,16 @@ void							*malloc(size_t size);
 void							*realloc(void *ptr, size_t size);
 void							free(void *ptr);
 void							show_alloc_mem(void);
-
 t_size							get_malloc_type(size_t size);
 size_t							get_page_size(size_t size);
 t_page							**get_head_page_type(t_size type);
-
 void							add_page(t_page *page);
 size_t							get_page_size(size_t size);
 t_page							*get_new_page(size_t size);
-
 t_block							*insert_block_in_page(t_page *page, size_t size);
 t_block							*get_new_block(size_t size);
-
 int								check_adress(void *adress);
-
+void							defragment(void);
 void							ft_putchar_fd(char c, int fd);
 void							ft_putstr_fd(char *str, int fd);
 void							ft_putnbr_fd(int n, int fd);
@@ -78,6 +74,7 @@ void							ft_print(const char *fmt, ...);
 void							*ft_memcpy(void *dest, const void *src, size_t n);
 void							ft_bzero(void *s, size_t n);
 
-void init_main_struct(void);
-t_block		*get_free_block_in_list(size_t size);
+void 							init_main_struct(void);
+t_block							*get_free_block_in_list(size_t size);
+
 #endif

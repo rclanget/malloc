@@ -6,7 +6,7 @@
 /*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 16:56:17 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/24 01:58:14 by zipo             ###   ########.fr       */
+/*   Updated: 2017/01/25 01:49:30 by zipo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,13 @@ void		add_before(t_block *list, t_block *new)
 	if (!tmp)
 		g_main_struct->free_block = new;
 }
-
 void		add_after(t_block *list, t_block *new)
 {
-	t_block *tmp;
 
-	tmp = list->free_next;
+	if ((new->free_next = list->free_next))
+		list->free_next->free_prev = new;
 	list->free_next = new;
 	new->free_prev = list;
-	if ((new->free_next = tmp))
-		tmp->free_prev = new;
 }
 
 static void	add_free_block_to_list(t_block *block)
@@ -88,7 +85,10 @@ void	free(void *ptr)
 			(container->parent_page->next || container->parent_page->prev)))
 			free_page(container->parent_page);
 		else
+		{
 			add_free_block_to_list(container);
+			defragment();
+		}
 	}
 	else
 		ft_fdprint(2, "*** Error: free(): invalid pointer  ***\n");
