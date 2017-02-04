@@ -15,18 +15,13 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+t_main g_main_struct;
+
 void 		init_main_struct(void)
 {
-	void 	*buf;
-
-	if (g_main_struct)
-		return ;
-	if ((buf = mmap(0, sizeof(g_main_struct), MMAP_FLAG, -1, 0)) != (void *)-1)
-	{
-		g_main_struct = (t_main *)buf;
-		ft_bzero(g_main_struct, sizeof(t_main));
-		g_main_struct->init = 1;
-	}
+	if (g_main_struct.init != 1)
+		ft_bzero(&g_main_struct, sizeof(t_main));
+	g_main_struct.init = 1;
 }
 
 t_size		get_malloc_type(size_t size)
@@ -45,7 +40,7 @@ t_block		*get_free_block_in_list(size_t size)
 {
 	t_block	*tmp;
 
-	tmp = g_main_struct->free_block;
+	tmp = g_main_struct.free_block;
 	while (tmp)
 	{
 		if (tmp->size >= size)
@@ -56,7 +51,7 @@ t_block		*get_free_block_in_list(size_t size)
 			if (tmp->free_prev)
 				tmp->free_prev->free_next = tmp->free_next;
 			else
-				g_main_struct->free_block = tmp->free_next;
+				g_main_struct.free_block = tmp->free_next;
 			tmp->free_next = 0;
 			tmp->free_prev = 0;
 			tmp->is_free = 0;
@@ -73,7 +68,7 @@ t_block	*get_free_block(t_size type, size_t size)
 	t_page	*p;
 
 	block = NULL;
-	p = g_main_struct->page;
+	p = g_main_struct.page;
 	if (!(block = get_free_block_in_list(size)))
 	{
 		while (p)

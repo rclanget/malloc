@@ -29,7 +29,7 @@ static t_block	*fusion_block(t_block *b1, t_block *b2)
 	if (b2->free_prev)
 		b2->free_prev->free_next = b2->free_next;
 	else
-		g_main_struct->free_block = b2->free_next;
+		g_main_struct.free_block = b2->free_next;
 	return (b1);
 }
 
@@ -38,7 +38,7 @@ void			defragment(void)
 	t_block	*free_blocks;
 	t_block	*tmp;
 
-	free_blocks = g_main_struct->free_block;
+	free_blocks = g_main_struct.free_block;
 	while (free_blocks)
 	{
 		if ((tmp = buddy_block(free_blocks)))

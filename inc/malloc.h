@@ -49,7 +49,7 @@ typedef struct					s_main
 	t_block						*free_block;
 }								t_main;
 
-t_main							*g_main_struct;
+extern t_main					g_main_struct;
 pthread_mutex_t 				g_malloc_lock;
 
 void							*malloc(size_t size);

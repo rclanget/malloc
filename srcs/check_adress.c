@@ -17,7 +17,7 @@ int	check_adress(void *adress)
 	t_page	*page;
 	t_block *block;
 
-	page = g_main_struct->page;
+	page = g_main_struct.page;
 	while (adress && page)
 	{
 		block = page->block_list;

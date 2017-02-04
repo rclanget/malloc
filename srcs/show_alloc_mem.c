@@ -78,5 +78,5 @@ void	show_all_pages(t_page *pages)
 
 void    show_alloc_mem(void)
 {
-	show_all_pages(g_main_struct->page);
+	show_all_pages(g_main_struct.page);
 }

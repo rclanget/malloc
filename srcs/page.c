@@ -19,13 +19,13 @@ void	add_page(t_page *page)
 {
 	t_page *head;
 
-	if ((head = g_main_struct->page))
+	if ((head = g_main_struct.page))
 	{
 		page->next = head;
 		if (head->prev)
 			head->prev = page;
 	}
-	g_main_struct->page = page;
+	g_main_struct.page = page;
 }
 
 size_t	get_page_size(size_t size)

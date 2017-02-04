@@ -27,12 +27,10 @@ void		add_before(t_block *list, t_block *new)
 	new->free_next = list;
 	new->free_prev = tmp;
 	if (!tmp)
-		g_main_struct->free_block = new;
+		g_main_struct.free_block = new;
 }
 void		add_after(t_block *list, t_block *new)
 {
-
-	printf("after\n");
 	if ((new->free_next = list->free_next))
 		list->free_next->free_prev = new;
 	list->free_next = new;
@@ -43,7 +41,7 @@ void	add_free_block_to_list(t_block *block)
 {
 	t_block	*free_block_list;
 
-	if ((free_block_list = g_main_struct->free_block))
+	if ((free_block_list = g_main_struct.free_block))
 	{
 		while (free_block_list)
 		{
@@ -59,10 +57,9 @@ void	add_free_block_to_list(t_block *block)
 		add_after(free_block_list, block);
 	}
 	else
-		g_main_struct->free_block = block;
+		g_main_struct.free_block = block;
 }
 
-#include <stdio.h>
 void	free_page(t_page *page)
 {
 	if (page->next)
@@ -70,7 +67,7 @@ void	free_page(t_page *page)
 	if (page->prev)
 		page->prev->next = page->next;
 	else
-		g_main_struct->page = page->next;
+		g_main_struct.page = page->next;
 	if (munmap(page, page->size + sizeof(t_page)) == -1)
 		ft_fdprint(2, "Error: munmap\n");
 }
@@ -82,7 +79,7 @@ void	free(void *ptr)
 	pthread_mutex_lock(&g_malloc_lock);
 	if (ptr && check_adress(ptr))
 	{
-		container = (ptr - sizeof(t_block));
+		container = (t_block *)((void *)ptr - sizeof(t_block));
 		container->is_free = 1;
 		container->parent_page->free_mem += (container->size + sizeof(t_block));
 		if (IS_PAGE_EMPTY(container->parent_page) &&
