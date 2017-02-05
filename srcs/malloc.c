@@ -17,7 +17,7 @@
 
 t_main g_main_struct;
 
-void 		init_main_struct(void)
+void		init_main_struct(void)
 {
 	if (g_main_struct.init != 1)
 		ft_bzero(&g_main_struct, sizeof(t_main));
@@ -62,7 +62,7 @@ t_block		*get_free_block_in_list(size_t size)
 	return (tmp);
 }
 
-t_block	*get_free_block(t_size type, size_t size)
+t_block		*get_free_block(t_size type, size_t size)
 {
 	t_block	*block;
 	t_page	*p;
@@ -83,7 +83,7 @@ t_block	*get_free_block(t_size type, size_t size)
 	return (block);
 }
 
-void	*malloc(size_t size)
+void		*malloc(size_t size)
 {
 	t_block	*block;
 	t_size	malloc_type;

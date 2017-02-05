@@ -11,12 +11,9 @@
 /* ************************************************************************** */
 
 #include "malloc.h"
-
 #include <unistd.h>
-#include <stdint.h>
-#include <stdarg.h>
 
-# define HEX_STRING "0123456789abcdef"
+#define HEX_STRING "0123456789abcdef"
 
 int		ft_unbrlen(uint64_t nbr, int base)
 {
@@ -25,16 +22,16 @@ int		ft_unbrlen(uint64_t nbr, int base)
 
 void	print_adress(int base, unsigned long i)
 {
-    if (i < (unsigned long)base)
-        write(1, &HEX_STRING[i], 1);
-    else
-    {
-        print_adress(base, i / base);
-        write(1, &HEX_STRING[i % base], 1);
-    }
+	if (i < (unsigned long)base)
+		write(1, &HEX_STRING[i], 1);
+	else
+	{
+		print_adress(base, i / base);
+		write(1, &HEX_STRING[i % base], 1);
+	}
 }
 
-int    show_all_blocks(t_block *block)
+int		show_all_blocks(t_block *block)
 {
 	size_t total;
 
@@ -76,7 +73,7 @@ void	show_all_pages(t_page *pages)
 	ft_print("Total: %d octets\n", total);
 }
 
-void    show_alloc_mem(void)
+void	show_alloc_mem(void)
 {
 	show_all_pages(g_main_struct.page);
 }

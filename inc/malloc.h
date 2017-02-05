@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/02/05 17:02:07 by rclanget          #+#    #+#             */
+/*   Updated: 2017/02/05 17:02:08 by rclanget         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MALLOC_H
 # define MALLOC_H
 
-#include <pthread.h>
+# include <pthread.h>
 
-# define GETPAGESIZE			(getpagesize())
-# define ROUNDUP(x)				(((x + GETPAGESIZE - 1) / GETPAGESIZE) * GETPAGESIZE)
+# define PAGESIZE				(getpagesize())
+# define ROUNDUP(x)				(((x + PAGESIZE - 1) / PAGESIZE) * PAGESIZE)
 # define MMAP_FLAG				PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON
 # define OFFSETOF(type, member)	((size_t) &((type *)0)->member)
 # define CONTAINEROF(ptr, t, m)	((t *)((char *)(ptr) - OFFSETOF(t, m)))
@@ -12,7 +24,7 @@
 # define TINY_SIZE				128
 # define SMALL_SIZE				1024
 
-struct							s_page;
+struct s_page;
 
 typedef struct					s_block
 {
@@ -50,7 +62,7 @@ typedef struct					s_main
 }								t_main;
 
 extern t_main					g_main_struct;
-pthread_mutex_t 				g_malloc_lock;
+pthread_mutex_t					g_malloc_lock;
 
 void							*malloc(size_t size);
 void							*realloc(void *ptr, size_t size);
@@ -62,7 +74,8 @@ t_page							**get_head_page_type(t_size type);
 void							add_page(t_page *page);
 size_t							get_page_size(size_t size);
 t_page							*get_new_page(size_t size);
-t_block							*insert_block_in_page(t_page *page, size_t size);
+t_block							*insert_block_in_page(t_page *page,\
+													size_t size);
 t_block							*get_new_block(size_t size);
 int								check_adress(void *adress);
 void							defragment(void);
@@ -71,10 +84,11 @@ void							ft_putstr_fd(char *str, int fd);
 void							ft_putnbr_fd(int n, int fd);
 void							ft_fdprint(int fd, const char *fmt, ...);
 void							ft_print(const char *fmt, ...);
-void							*ft_memcpy(void *dest, const void *src, size_t n);
+void							*ft_memcpy(void *dest,\
+											const void *src, size_t n);
 void							ft_bzero(void *s, size_t n);
 
-void 							init_main_struct(void);
+void							init_main_struct(void);
 t_block							*get_free_block_in_list(size_t size);
 
 #endif

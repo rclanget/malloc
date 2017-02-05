@@ -15,9 +15,9 @@
 #include <sys/mman.h>
 
 #include <stdio.h>
-# define IS_PAGE_EMPTY(x) (x->size == x->free_mem)
+#define IS_PAGE_EMPTY(x) (x->size == x->free_mem)
 
-void		add_before(t_block *list, t_block *new)
+void	add_before(t_block *list, t_block *new)
 {
 	t_block *tmp;
 
@@ -29,7 +29,8 @@ void		add_before(t_block *list, t_block *new)
 	if (!tmp)
 		g_main_struct.free_block = new;
 }
-void		add_after(t_block *list, t_block *new)
+
+void	add_after(t_block *list, t_block *new)
 {
 	if ((new->free_next = list->free_next))
 		list->free_next->free_prev = new;
