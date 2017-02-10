@@ -28,6 +28,7 @@ struct s_page;
 
 typedef struct					s_block
 {
+	int							magic_1;
 	size_t						size;
 	int							is_free;
 	struct s_page				*parent_page;
@@ -35,6 +36,7 @@ typedef struct					s_block
 	struct s_block				*prev;
 	struct s_block				*free_next;
 	struct s_block				*free_prev;
+	int							magic_2;
 }								t_block;
 
 typedef enum					e_size
@@ -49,6 +51,7 @@ typedef struct					s_page
 	t_size						type;
 	size_t						size;
 	size_t						free_mem;
+	size_t						space;
 	t_block						*block_list;
 	struct s_page				*next;
 	struct s_page				*prev;

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "malloc.h"
+#include <unistd.h>
 
 int	check_adress(void *adress)
 {

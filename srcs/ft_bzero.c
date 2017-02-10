@@ -19,7 +19,7 @@ void	ft_bzero(void *s, size_t n)
 	counter = 0;
 	while (counter < n)
 	{
-		*((char*)s + counter) = '\0';
+		*((char *)s + counter) = '\0';
 		counter++;
 	}
 }

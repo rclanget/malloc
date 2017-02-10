@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../malloc.h"
+#include <unistd.h>
+#include "malloc.h"
 
 int		main(void)
 {
@@ -18,6 +19,7 @@ int		main(void)
 	char		*addr;
 
 	i = 0;
+	(char*)malloc(1024);
 	while (i < 1024)
 	{
 		addr = (char*)malloc(1024);

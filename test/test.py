@@ -19,7 +19,7 @@ lib_inc = "../inc"
 # functions
 def page_reclaims(prog):
     # com = "./run.sh /usr/bin/time -l ./" + bin_folder + prog
-    com = "./run.sh ./timel ./" + bin_folder + prog
+    com = "./run.sh /usr/bin/time -l ./" + bin_folder + prog
     pipe = cmd.Popen(com.split(), stdout=cmd.PIPE, stderr=cmd.PIPE)
     output, errput = pipe.communicate()
     m = re.search('([0-9]+?)[ \t]+page[ \t]+reclaims', errput)
@@ -55,7 +55,8 @@ cmd.call(com.split())
 
 for f in test_files:
     output_file = f[:-2]
-    com = "gcc -o " + bin_folder + output_file + " " + f + " -L ../ -lft_malloc" + " -I " + lib_inc
+    # com = "gcc -o " + bin_folder + output_file + " " + f + " -L ../ -lft_malloc" + " -I " + lib_inc
+    com = "gcc -o " + bin_folder + output_file + " " + f + " -I " + lib_inc
     cmd.call(com.split())
 
 #############################################################

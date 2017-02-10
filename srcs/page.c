@@ -22,7 +22,7 @@ void	add_page(t_page *page)
 	if ((head = g_main_struct.page))
 	{
 		page->next = head;
-		if (head->prev)
+		// if (head->prev)
 			head->prev = page;
 	}
 	g_main_struct.page = page;
@@ -46,13 +46,14 @@ t_page	*get_new_page(size_t size)
 
 	page_len = get_page_size(size) + sizeof(t_page);
 	page_len = ROUNDUP(page_len);
-	if ((buf = mmap(0, page_len, MMAP_FLAG, -1, 0)) != (void *)-1)
+	if ((buf = mmap(0, page_len, MMAP_FLAG, -1, 0)) != MAP_FAILED)
 	{
 		new_page = (t_page *)buf;
 		ft_bzero(new_page, page_len);
 		new_page->type = get_malloc_type(size);
 		new_page->free_mem = (page_len - sizeof(t_page));
 		new_page->size = (page_len - sizeof(t_page));
+		new_page->space = (page_len - sizeof(t_page));
 		return (new_page);
 	}
 	return (0);
