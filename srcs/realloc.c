@@ -14,11 +14,15 @@
 
 void			*realloc(void *ptr, size_t size)
 {
+debug("IN\n");
 	t_block		*block;
 	t_block		*tmp;
 
 	if (ptr == 0)
+	{
+debug2("OUT\n");
 		return (malloc(size));
+	}
 	if (!size)
 		free(ptr);
 	pthread_mutex_lock(&g_malloc_lock);
@@ -31,8 +35,10 @@ void			*realloc(void *ptr, size_t size)
 			block = ((void *)tmp - sizeof(t_block));
 		}
 		pthread_mutex_unlock(&g_malloc_lock);
+debug2("OUT\n");
 		return ((void *)block + sizeof(t_block));
 	}
 	pthread_mutex_unlock(&g_malloc_lock);
+debug2("OUT\n");
 	return (0);
 }

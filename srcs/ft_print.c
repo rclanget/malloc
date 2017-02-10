@@ -16,16 +16,19 @@
 
 void	print_arg(va_list ap, const char *fmt, int fd)
 {
+debug("IN\n");
 	if (*fmt == 's')
 		ft_putstr_fd(va_arg(ap, char *), fd);
 	else if (*fmt == 'c')
 		ft_putchar_fd(va_arg(ap, int), fd);
 	else if (*fmt == 'd')
 		ft_putnbr_fd(va_arg(ap, int), fd);
+debug2("OUT\n");
 }
 
 void	ft_fdprint(int fd, const char *fmt, ...)
 {
+debug("IN\n");
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -34,14 +37,16 @@ void	ft_fdprint(int fd, const char *fmt, ...)
 		if (*fmt == '%')
 			print_arg(ap, ++fmt, fd);
 		else
-			write(fd, fmt, 1);
+			//write(fd, fmt, 1);
 		fmt++;
 	}
 	va_end(ap);
+debug2("OUT\n");
 }
 
 void	ft_print(const char *fmt, ...)
 {
+debug("IN\n");
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -50,8 +55,9 @@ void	ft_print(const char *fmt, ...)
 		if (*fmt == '%')
 			print_arg(ap, ++fmt, 1);
 		else
-			write(1, fmt, 1);
+			//write(1, fmt, 1);
 		fmt++;
 	}
 	va_end(ap);
+debug2("OUT\n");
 }

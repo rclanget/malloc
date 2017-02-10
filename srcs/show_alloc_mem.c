@@ -17,11 +17,16 @@
 
 int		ft_unbrlen(uint64_t nbr, int base)
 {
-	return ((nbr > 0) ? 1 + ft_unbrlen(nbr / base, base) : 0);
+	int a;
+debug("IN\n");
+	a = (nbr > 0) ? 1 + ft_unbrlen(nbr / base, base) : 0;
+debug2("OUT\n");
+	return (a);
 }
 
 void	print_adress(int base, unsigned long i)
 {
+debug("IN\n");
 	if (i < (unsigned long)base)
 		write(1, &HEX_STRING[i], 1);
 	else
@@ -29,10 +34,12 @@ void	print_adress(int base, unsigned long i)
 		print_adress(base, i / base);
 		write(1, &HEX_STRING[i % base], 1);
 	}
+debug2("OUT\n");
 }
 
 int		show_all_blocks(t_block *block)
 {
+debug("IN\n");
 	size_t total;
 
 	total = 0;
@@ -49,11 +56,13 @@ int		show_all_blocks(t_block *block)
 		}
 		block = block->next;
 	}
+debug2("OUT\n");
 	return (total);
 }
 
 void	show_all_pages(t_page *pages)
 {
+debug("IN\n");
 	size_t	total;
 
 	total = 0;
@@ -71,9 +80,11 @@ void	show_all_pages(t_page *pages)
 		pages = pages->next;
 	}
 	ft_print("Total: %d octets\n", total);
+debug2("OUT\n");
 }
 
 void	show_alloc_mem(void)
 {
+debug("IN\n");
 	show_all_pages(g_main_struct.page);
 }

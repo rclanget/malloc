@@ -10,24 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <malloc.h>
 #include <unistd.h>
 
 void	ft_putchar_fd(char c, int fd)
 {
+debug("IN\n");
 	write(fd, &c, 1);
 }
 
 void	ft_putstr_fd(char *str, int fd)
 {
+debug("IN\n");
 	int	i;
 
 	i = 0;
 	while (str[i])
 		ft_putchar_fd(str[i++], fd);
+debug2("OUT\n");
 }
 
 void	ft_putnbr_fd(int n, int fd)
 {
+debug("IN\n");
 	if (n == -2147483648)
 		ft_putstr_fd("-2147483648", fd);
 	else
@@ -45,4 +50,5 @@ void	ft_putnbr_fd(int n, int fd)
 			ft_putnbr_fd((n % 10), fd);
 		}
 	}
+debug2("OUT\n");
 }

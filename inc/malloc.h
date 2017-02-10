@@ -15,6 +15,34 @@
 
 # include <pthread.h>
 
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+int __ident;
+#define debug(...) \
+		static int called_number = 0; \
+		({	\
+			char __s[250]; \
+			memset(__s, 0, 250); \
+			int __a = 0; while (__a < __ident) { sprintf(&__s[strlen(__s)], "  "); ++__a; } \
+			sprintf(&__s[strlen(__s)], "\033[32;1m%s(%d)(%d): \033[0m", __FUNCTION__, __LINE__, ++called_number); \
+			sprintf(&__s[strlen(__s)], __VA_ARGS__); \
+			write(2, __s, 250); \
+			++__ident; \
+		})
+#define debug2(...) \
+		({	\
+			--__ident; \
+			char __s[250]; \
+			memset(__s, 0, 250); \
+			int __a = 0; while (__a < __ident) { sprintf(&__s[strlen(__s)], "  "); ++__a; } \
+			sprintf(&__s[strlen(__s)], "\033[31;1m%s(%d)(%d): \033[0m", __FUNCTION__, __LINE__, called_number); \
+			sprintf(&__s[strlen(__s)], __VA_ARGS__); \
+			write(2, __s, 250); \
+		})
+
+
+
 # define PAGESIZE				(getpagesize())
 # define ROUNDUP(x)				(((x + PAGESIZE - 1) / PAGESIZE) * PAGESIZE)
 # define MMAP_FLAG				PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON

@@ -10,10 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <malloc.h>
 #include <stdlib.h>
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
+debug("IN\n");
 	unsigned int counter;
 
 	counter = 0;
@@ -22,5 +24,6 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 		((char*)dest)[counter] = ((char*)src)[counter];
 		counter++;
 	}
+debug2("OUT\n");
 	return (dest);
 }

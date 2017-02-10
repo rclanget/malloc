@@ -10,11 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <malloc.h>
 #include <stdlib.h>
 
 void	ft_bzero(void *s, size_t n)
 {
-	unsigned int counter;
+debug("IN\n");
+	size_t counter;
 
 	counter = 0;
 	while (counter < n)
@@ -22,4 +24,5 @@ void	ft_bzero(void *s, size_t n)
 		*((char *)s + counter) = '\0';
 		counter++;
 	}
+debug2("OUT\n");
 }

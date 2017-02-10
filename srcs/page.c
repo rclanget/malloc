@@ -17,6 +17,7 @@
 
 void	add_page(t_page *page)
 {
+debug("IN\n");
 	t_page *head;
 
 	if ((head = g_main_struct.page))
@@ -26,20 +27,29 @@ void	add_page(t_page *page)
 			head->prev = page;
 	}
 	g_main_struct.page = page;
+debug2("OUT\n");
 }
 
 size_t	get_page_size(size_t size)
 {
+debug("IN\n");
 	if (size <= TINY_SIZE)
+	{
+debug2("OUT\n");
 		return ((TINY_SIZE + sizeof(t_block)) * 100);
+	}
 	else if (size > TINY_SIZE && size <= SMALL_SIZE)
+	{
+debug2("OUT\n");
 		return ((SMALL_SIZE + sizeof(t_block)) * 50);
-	else
-		return (size + sizeof(t_block));
+	}
+debug2("OUT\n");
+	return (size + sizeof(t_block));
 }
 
 t_page	*get_new_page(size_t size)
 {
+debug("IN\n");
 	void	*buf;
 	t_page	*new_page;
 	size_t	page_len;
@@ -54,7 +64,9 @@ t_page	*get_new_page(size_t size)
 		new_page->free_mem = (page_len - sizeof(t_page));
 		new_page->size = (page_len - sizeof(t_page));
 		new_page->space = (page_len - sizeof(t_page));
+debug2("OUT\n");
 		return (new_page);
 	}
+debug2("OUT\n");
 	return (0);
 }

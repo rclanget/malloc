@@ -14,6 +14,7 @@
 
 t_block	*insert_block_in_page(t_page *p, size_t size)
 {
+debug("IN\n");
 	t_block	*block;
 
 	block = (t_block *)((void *)p + (p->size - p->space) + sizeof(t_page));
@@ -27,11 +28,13 @@ t_block	*insert_block_in_page(t_page *p, size_t size)
 	p->block_list = block;
 	p->free_mem -= (size + sizeof(t_block));
 	p->space -= (size + sizeof(t_block));
+debug2("OUT\n");
 	return (block);
 }
 
 t_block	*get_new_block(size_t size)
 {
+debug("IN\n");
 	t_page	*new_page;
 	t_block	*new_block;
 
@@ -39,8 +42,9 @@ t_block	*get_new_block(size_t size)
 	{
 		new_block = insert_block_in_page(new_page, size);
 		add_page(new_page);
+debug2("OUT\n");
 		return (new_block);
 	}
-	else
-		return (0);
+debug2("OUT\n");
+	return (0);
 }

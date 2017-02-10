@@ -15,6 +15,7 @@
 
 int	check_adress(void *adress)
 {
+debug("IN\n");
 	t_page	*page;
 	t_block *block;
 
@@ -25,10 +26,14 @@ int	check_adress(void *adress)
 		while (block)
 		{
 			if (!block->is_free && ((void *)block + sizeof(t_block)) == adress)
+			{
+debug2("OUT\n");
 				return (1);
+			}
 			block = block->next;
 		}
 		page = page->next;
 	}
+debug2("OUT\n");
 	return (0);
 }
