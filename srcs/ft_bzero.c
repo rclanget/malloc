@@ -12,14 +12,11 @@
 
 #include <stdlib.h>
 
-void	ft_bzero(void *s, size_t n)
+void	ft_bzero(void *p, size_t n)
 {
-	unsigned int counter;
+	void	*s;
 
-	counter = 0;
-	while (counter < n)
-	{
-		*((char*)s + counter) = '\0';
-		counter++;
-	}
+	s = p;
+	while (0 != n--)
+		*(char *)s++ = 0;
 }

@@ -15,9 +15,7 @@ NAME		=	libft_malloc.so
 IDIR		=	inc/
 
 SRC_PATH	=	srcs/
-SRC_NAME	=	block.c check_adress.c free.c ft_bzero.c ft_memcpy.c ft_print.c\
-				ft_put_fd.c malloc.c page.c realloc.c show_alloc_mem.c\
-				defragment.c
+SRC_NAME	=	malloc.c ft_bzero.c ft_singleton.c free.c ft_print.c
 
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
 
