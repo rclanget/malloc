@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+         #
+#    By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/08 20:12:26 by rclanget          #+#    #+#              #
-#    Updated: 2017/01/24 23:24:57 by zipo             ###   ########.fr        #
+#    Updated: 2017/03/20 19:04:33 by rclanget         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,14 @@ NAME		=	libft_malloc.so
 IDIR		=	inc/
 
 SRC_PATH	=	srcs/
-SRC_NAME	=	block.c check_adress.c free.c ft_bzero.c ft_memcpy.c ft_print.c\
-				ft_put_fd.c malloc.c page.c realloc.c show_alloc_mem.c\
-				defragment.c
+SRC_NAME	=	malloc.c \
+				realloc.c \
+				free.c \
+				ft_singleton.c \
+				ft_bzero.c \
+				ft_get_new_block.c \
+				ft_get_free_block.c \
+				ft_get_block_in_page.c
 
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
 

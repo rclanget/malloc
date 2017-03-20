@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   ft_get_block_in_page.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/20 16:04:52 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/20 16:05:14 by rclanget         ###   ########.fr       */
+/*   Created: 2017/03/20 18:23:16 by rclanget          #+#    #+#             */
+/*   Updated: 2017/03/20 18:44:37 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "malloc.h"
 
-void	ft_bzero(void *p, size_t n)
+t_block *ft_get_block_in_page(t_page *page, size_t size)
 {
-	void	*s;
+	t_block		*block;
+	size_t		offset;	
 
-	s = p;
-	while (0 != n--)
-		*(char *)s++ = 0;
+	offset = sizeof(t_page) + (page->size - page->capacity);
+	block = (t_block *)((char *)page + offset);
+	block->magic_1 = 0x29a;
+	block->size = size;
+	block->parent_page = page;
+	block->next = page->blocks;
+	page->blocks = block;
+	page->capacity -= size + sizeof(t_block);
+	return (block);
 }

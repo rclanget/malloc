@@ -186,11 +186,11 @@ int main()
 	RUN(test_get_malloc_type);
 	RUN(test_get_free_block_in_list);
 	RUN(test_check_adress);
-	RUN(test_defragment);
-	RUN(test_add_before);
-	RUN(test_add_after);
-	RUN(test_add_free_block_to_list);
-	RUN(test_free_page);
+	// RUN(test_defragment);
+	// RUN(test_add_before);
+	// RUN(test_add_after);
+	// RUN(test_add_free_block_to_list);
+	// RUN(test_free_page);
 	system("./test.py");
 	return TEST_REPORT();
 }

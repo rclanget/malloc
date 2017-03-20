@@ -3,36 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   realloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zipo <zipo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/23 01:36:41 by zipo              #+#    #+#             */
-/*   Updated: 2017/01/25 02:05:10 by zipo             ###   ########.fr       */
+/*   Created: 2017/03/20 19:00:08 by rclanget          #+#    #+#             */
+/*   Updated: 2017/03/20 19:35:11 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void			*realloc(void *ptr, size_t size)
-{
-	t_block		*block;
-	t_block		*tmp;
+#include <string.h>
 
-	if (ptr == 0)
-		return (malloc(size));
-	if (!size)
-		free(ptr);
-	pthread_mutex_lock(&g_malloc_lock);
-	if (check_adress(ptr) && (block = (t_block *)(ptr - sizeof(t_block))))
-	{
-		if (block->size < size && (tmp = malloc(size)))
-		{
-			ft_memcpy(tmp, ((void *)block + sizeof(t_block)), block->size);
-			free(((void *)block + sizeof(t_block)));
-			block = ((void *)tmp - sizeof(t_block));
-		}
-		pthread_mutex_unlock(&g_malloc_lock);
-		return ((void *)block + sizeof(t_block));
-	}
-	pthread_mutex_unlock(&g_malloc_lock);
-	return (0);
+void *realloc(void *ptr, size_t size)
+{
+	void *new;
+	t_block *block;
+	size_t ptr_size;
+
+	if (!ptr)
+		return (NULL);
+	block = (t_block *)(ptr - sizeof(t_block));
+	if (block->free)
+		return (NULL);
+	new = malloc(size);
+	ptr_size = block->size;
+	memcpy(new, ptr, ptr_size);
+	free(ptr);
+	return (new);
 }

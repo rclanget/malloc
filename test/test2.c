@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../malloc.h"
+#include "malloc.h"
+#include <stdio.h>
 
 int		main(void)
 {
@@ -18,12 +19,15 @@ int		main(void)
 	char		*addr;
 
 	i = 0;
-	while (i < 1024)
+
+	write(2, "------------------------> test2 IN\n", 35);
+	while (i < 10240)
 	{
-		addr = (char*)malloc(1024);
+		addr = (char*)malloc(128);
 		addr[0] = 42;
 		free(addr);
 		i++;
 	}
+	write(2, "------------------------> test2 OUT\n", 36);
 	return (0);
 }

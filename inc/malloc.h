@@ -1,94 +1,88 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/05 17:02:07 by rclanget          #+#    #+#             */
-/*   Updated: 2017/02/05 17:02:08 by rclanget         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MALLOC_H
 # define MALLOC_H
 
-# include <pthread.h>
+#include <unistd.h>
 
-# define PAGESIZE				(getpagesize())
-# define ROUNDUP(x)				(((x + PAGESIZE - 1) / PAGESIZE) * PAGESIZE)
-# define MMAP_FLAG				PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON
-# define OFFSETOF(type, member)	((size_t) &((type *)0)->member)
-# define CONTAINEROF(ptr, t, m)	((t *)((char *)(ptr) - OFFSETOF(t, m)))
-
-# define TINY_SIZE				128
-# define SMALL_SIZE				1024
+# define MMAP_FLAG		PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON
+# define PAGESIZE   	(getpagesize())
+# define ROUNDUP(x)     ((((x) + PAGESIZE - 1) / PAGESIZE) * PAGESIZE)
+# define TINY_SIZE		(PAGESIZE / 16)
+# define SMALL_SIZE 	(PAGESIZE / 4)
 
 struct s_page;
 
-typedef struct					s_block
-{
-	size_t						size;
-	int							is_free;
-	struct s_page				*parent_page;
-	struct s_block				*next;
-	struct s_block				*prev;
-	struct s_block				*free_next;
-	struct s_block				*free_prev;
-}								t_block;
-
-typedef enum					e_size
+typedef enum		e_type
 {
 	TINY = 1,
 	SMALL = 2,
 	LARGE = 3
-}								t_size;
+}					t_type;
 
-typedef struct					s_page
+typedef struct		s_block
 {
-	t_size						type;
-	size_t						size;
-	size_t						free_mem;
-	t_block						*block_list;
-	struct s_page				*next;
-	struct s_page				*prev;
-}								t_page;
+	int				magic_1; // 0x29a
+	size_t			size;
+	char			free;
+	struct s_page	*parent_page;
+	struct s_block	*next;
+	struct s_block	*free_next;
+}					t_block;
 
-typedef struct					s_main
+typedef struct		s_page
 {
-	int							init;
-	t_page						*page;
-	t_block						*free_block;
-}								t_main;
+	t_type			type;
+	size_t			size;
+	size_t			capacity;
+	t_block			*blocks;
+	struct s_page	*next;
+}					t_page;
 
-extern t_main					g_main_struct;
-pthread_mutex_t					g_malloc_lock;
+typedef struct		s_malloc
+{
+	t_page			*large;
+	t_page			*small;
+	t_page			*tiny;
+	t_block			*free_blocks;
+}					t_malloc;
 
-void							*malloc(size_t size);
-void							*realloc(void *ptr, size_t size);
-void							free(void *ptr);
-void							show_alloc_mem(void);
-t_size							get_malloc_type(size_t size);
-size_t							get_page_size(size_t size);
-t_page							**get_head_page_type(t_size type);
-void							add_page(t_page *page);
-size_t							get_page_size(size_t size);
-t_page							*get_new_page(size_t size);
-t_block							*insert_block_in_page(t_page *page,\
-													size_t size);
-t_block							*get_new_block(size_t size);
-int								check_adress(void *adress);
-void							defragment(void);
-void							ft_putchar_fd(char c, int fd);
-void							ft_putstr_fd(char *str, int fd);
-void							ft_putnbr_fd(int n, int fd);
-void							ft_fdprint(int fd, const char *fmt, ...);
-void							ft_print(const char *fmt, ...);
-void							*ft_memcpy(void *dest,\
-											const void *src, size_t n);
-void							ft_bzero(void *s, size_t n);
+/*
+*	ft_bzero.c
+*/
+void				ft_bzero(void *p, size_t n);
 
-void							init_main_struct(void);
-t_block							*get_free_block_in_list(size_t size);
+/*
+*	ft_singleton.c
+*/
+t_malloc			*ft_singleton(void);
+
+/*
+* 	ft_get_block_in_page.c
+*/
+t_block				*ft_get_block_in_page(t_page *page, size_t size);
+
+/*
+* 	ft_get_new_block.c
+*/
+void				*ft_get_new_block(t_type type, size_t size);
+
+/*
+* 	ft_get_free_block.c
+*/
+void				*ft_get_free_block(t_type type, size_t size);
+
+/*
+*	realloc.c
+*/
+void				*realloc(void *ptr, size_t size);
+
+/*
+*	free.c
+*/
+void				free(void *ptr);
+
+/*
+*	malloc.c
+*/
+void				*malloc(size_t size);
 
 #endif
