@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test1.c                                            :+:      :+:    :+:   */
+/*   calloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byoung-w <byoung-w@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/09/08 14:49:06 by byoung-w          #+#    #+#             */
-/*   Updated: 2014/09/08 14:49:10 by byoung-w         ###   ########.fr       */
+/*   Created: 2017/03/21 19:29:59 by rclanget          #+#    #+#             */
+/*   Updated: 2017/03/21 19:44:49 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-#include <stdio.h>
-
-int		main(void)
+void	*calloc(size_t count, size_t size)
 {
-	int		i;
-	char	*addr;
+	void *ptr;
 
-	i = 0;
-	while (i < 1024)
+	ft_print("calloc_in\n");
+	pthread_mutex_lock(&mutex);
+	ptr = ft_malloc(count * size);
+	if (ptr)
 	{
-		addr = (char*)malloc(1024);
-		addr[0] = 42;
-		i++;
+		ft_bzero(ptr, count * size);
 	}
-	return (0);
+	pthread_mutex_unlock(&mutex);
+	ft_print("calloc_end\n");
+	return (ptr);
 }

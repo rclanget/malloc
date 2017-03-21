@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test1.c                                            :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byoung-w <byoung-w@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/09/08 14:49:06 by byoung-w          #+#    #+#             */
-/*   Updated: 2014/09/08 14:49:10 by byoung-w         ###   ########.fr       */
+/*   Created: 2017/03/21 18:56:40 by rclanget          #+#    #+#             */
+/*   Updated: 2017/03/21 18:59:14 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include <string.h>
 
-#include <stdio.h>
-
-int		main(void)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	int		i;
-	char	*addr;
+	unsigned int counter;
 
-	i = 0;
-	while (i < 1024)
+	counter = 0;
+	while (counter < n)
 	{
-		addr = (char*)malloc(1024);
-		addr[0] = 42;
-		i++;
+		((char*)dest)[counter] = ((char*)src)[counter];
+		counter++;
 	}
-	return (0);
+	return (dest);
 }

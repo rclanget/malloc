@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
 
 #define M1 (1024 * 1024)
 

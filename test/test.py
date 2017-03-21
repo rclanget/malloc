@@ -7,18 +7,28 @@ import subprocess as cmd
 import os
 import sys
 import shlex
+import glob
+import string
+import platform
 
 os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
 
 bin_folder = "bin/"
 test_files = ["test0.c", "test1.c", "test2.c", "test3.c",
-        "test3_5.c", "test4.c"]
-lib_inc = "../"
+        "test3_5.c", "test4.c", "test6.c"]
+lib_inc = "../inc"
+
+if (platform.system() == "Linux") :
+    com = "gcc -Wall -Werror -Wextra timel.c -o timel"
+    cmd.call(com.split());
+    time_path = "./timel"
+else :
+    time_path = "/usr/bin/time -l"
 
 #############################################################
 # functions
 def page_reclaims(prog):
-    com = "./run.sh /usr/bin/time -l ./" + bin_folder + prog
+    com = "./run.sh " + time_path + " ./" + bin_folder + prog
     pipe = cmd.Popen(com.split(), stdout=cmd.PIPE, stderr=cmd.PIPE)
     output, errput = pipe.communicate()
     m = re.search('([0-9]+?)[ \t]+page[ \t]+reclaims', errput)
@@ -35,12 +45,21 @@ def cmd_output(com):
 def cmd_output_only(com):
     pipe = cmd.Popen(com, stdout=cmd.PIPE, stderr=cmd.PIPE)
     output, errput = pipe.communicate()
-    return output
+    return errput
 
 def cmp_output(prog, to_compare):
     com = "./run.sh ./" + bin_folder + prog
     output = cmd_output(com.split())
     if output[0] == to_compare:
+        print("OK")
+    else:
+        print("ERROR")
+
+def cmp_output_command(command):
+    com = "./run.sh " + command
+    output = cmd_output(com.split())
+    output1 = cmd_output(command.split())
+    if output[0] == output1[0]:
         print("OK")
     else:
         print("ERROR")
@@ -54,8 +73,9 @@ cmd.call(com.split())
 
 for f in test_files:
     output_file = f[:-2]
-    com = "gcc -Wno-unused-result -o " + bin_folder + output_file + " " + f + " -I ../inc"
-    print(com)
+    com = "gcc -o " + bin_folder + output_file + " " + f + " -I " + lib_inc
+    if output_file == "test6" :
+        com = com + " -lpthread"
     cmd.call(com.split())
 
 #############################################################
@@ -63,7 +83,7 @@ for f in test_files:
 pr0 = page_reclaims("test0")
 pr1 = page_reclaims("test1")
 pr2 = page_reclaims("test2")
-pr1c = pr1 - pr0
+pr1c = int(pr1) - int(pr0)
 print("#####Test malloc")
 print("Page reclaims for test0 (NO MALLOC, initial PR):     " + str(pr0))
 print("Page reclaims for test1 (WITH MALLOC, PR Full Load): " + str(pr1))
@@ -94,29 +114,72 @@ elif pr2 < pr1:
     print("Free is functioning.")
 else:
     print("The free does not work.")
-print("");
+print("")
 #############################################################
 # Realloc
 print("#####Test realloc")
 cmp_output("test3", "Bonjours\nBonjours\n")
+print("")
 
 #############################################################
 # Realloc ++
 print("#####Test realloc++")
 cmp_output("test3_5", "Bonjours\nBonjours\n")
+print("")
+
+#############################################################
+# Thread Safety Test
+print("#####Test Thread-Safe")
+cmp_output("test6", "oo")
+print("")
 
 #############################################################
 # Errors
 print("#####Test errors")
 cmp_output("test4", "Bonjours\n")
+print("")
 
 #############################################################
 # show_alloc_mem
 # For this test to work, you need to have the libmalloc_darwin...
 # in the current directory.
 print("#####Test print_alloc_mem")
-com = "gcc"+ " -L../ " + " -Wall -Wno-unused-result -o " + bin_folder + "test5" + " " + "test5.c" + " -lft_malloc -I inc -I ../inc"
+com = "cp " + string.join(glob.glob('../libft_malloc*')) + " ./"
+cmd.Popen(com.split())
+com = "gcc test5.c -o " + bin_folder + "test5 -L. -lft_malloc -I../inc"
 cmd.call(com.split())
 com = "./" + bin_folder + "test5"
 output = cmd_output_only(com.split())
+com = "rm " + string.join(glob.glob('libft_malloc*'))
+cmd.call(com.split())
 print(output)
+
+#############################################################
+# run `ls` command with the malloc library
+print("#####Test `ls` command")
+cmp_output_command("ls")
+print("")
+
+#############################################################
+# run `ls` command with the malloc library
+print("#####Test `ls -l` command")
+cmp_output_command("ls -l")
+print("")
+
+#############################################################
+# run `ls` command with the malloc library
+print("#####Test `ls -lR ..` command")
+cmp_output_command("ls -lR ..")
+print("")
+
+#############################################################
+# run `ls` command with the malloc library
+print("#####Test `ls -Rla ~` command")
+cmp_output_command("ls -Rla ~")
+print("")
+
+#############################################################
+# run `grep` command with the malloc library
+print("#####Test `grep malloc *` command")
+cmp_output_command("grep malloc " + string.join(glob.glob('*')))
+print("")

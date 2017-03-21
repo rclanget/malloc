@@ -6,7 +6,7 @@
 #    By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/08 20:12:26 by rclanget          #+#    #+#              #
-#    Updated: 2017/03/20 19:04:33 by rclanget         ###   ########.fr        #
+#    Updated: 2017/03/21 19:32:31 by rclanget         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,20 @@ IDIR		=	inc/
 SRC_PATH	=	srcs/
 SRC_NAME	=	malloc.c \
 				realloc.c \
+				calloc.c \
 				free.c \
 				ft_singleton.c \
 				ft_bzero.c \
+				ft_memcpy.c \
+				ft_print.c \
+				ft_putstr_fd.c \
+				ft_putnbr_fd.c \
+				ft_putchar_fd.c \
+				ft_strlen.c \
 				ft_get_new_block.c \
 				ft_get_free_block.c \
-				ft_get_block_in_page.c
+				ft_get_block_in_page.c \
+				show_alloc_mem.c
 
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
 

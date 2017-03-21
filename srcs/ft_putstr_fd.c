@@ -1,30 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test1.c                                            :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byoung-w <byoung-w@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/09/08 14:49:06 by byoung-w          #+#    #+#             */
-/*   Updated: 2014/09/08 14:49:10 by byoung-w         ###   ########.fr       */
+/*   Created: 2014/11/08 10:53:34 by rclanget          #+#    #+#             */
+/*   Updated: 2017/03/21 19:15:42 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-#include <stdio.h>
-
-int		main(void)
+void	ft_putstr_fd(char const *s, int fd)
 {
-	int		i;
-	char	*addr;
-
-	i = 0;
-	while (i < 1024)
-	{
-		addr = (char*)malloc(1024);
-		addr[0] = 42;
-		i++;
-	}
-	return (0);
+	if (s)
+		write(fd, s, ft_strlen(s));
 }
