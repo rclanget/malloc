@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 17:46:32 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 17:27:53 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/22 19:26:23 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@ t_page *ft_get_new_large_page(size_t size)
 
 	round_size = ROUNDUP(size + sizeof(t_page) + sizeof(t_block));
 	new = (t_page *)mmap(0, round_size, MMAP_FLAG, -1, 0);
-	ft_bzero(new, sizeof(t_page));
+	if (new == MAP_FAILED)
+		return (NULL);
+	ft_bzero(new, round_size);
 	new->type = LARGE;
 	new->size = round_size - sizeof(t_page);
 	new->capacity = round_size - sizeof(t_page);
+	new->offset = 0;
 	new->next = ft_singleton()->large;
 	ft_singleton()->large = new;
 	return (new);
@@ -38,7 +41,9 @@ t_page *ft_get_new_page(t_type type)
 	size = ((type == TINY ? TINY_SIZE : SMALL_SIZE) + sizeof(t_block)) * 100;
 	round_size = ROUNDUP(size + sizeof(t_page));
 	new = (t_page *)mmap(0, round_size, MMAP_FLAG, -1, 0);
-	ft_bzero(new, sizeof(t_page));
+	if (new == MAP_FAILED)
+		return (NULL);
+	ft_bzero(new, round_size);
 	new->type = type;
 	new->size = round_size - sizeof(t_page);
 	new->capacity = round_size - sizeof(t_page);
@@ -59,6 +64,8 @@ void *ft_get_new_block(t_type type, size_t size)
 {
 	t_page *new_page;
 	t_block *new_block;
+
+	(void)type;
 
 	new_block = NULL;
 	if (type == LARGE)

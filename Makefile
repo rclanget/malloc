@@ -6,7 +6,7 @@
 #    By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/08 20:12:26 by rclanget          #+#    #+#              #
-#    Updated: 2017/03/21 19:32:31 by rclanget         ###   ########.fr        #
+#    Updated: 2017/03/22 19:18:47 by rclanget         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,6 @@ IDIR		=	inc/
 SRC_PATH	=	srcs/
 SRC_NAME	=	malloc.c \
 				realloc.c \
-				calloc.c \
 				free.c \
 				ft_singleton.c \
 				ft_bzero.c \

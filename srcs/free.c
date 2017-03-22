@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 18:42:13 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 19:51:55 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/22 19:49:42 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@ void ft_free(void *ptr)
 {
 	t_block *block;
 
-	if (ptr)
+	if (ptr && *((char *)ptr))
 	{
-		block = (t_block *)((char *)ptr - sizeof(t_block));
+		block = (t_block *)((void *)(char *)ptr - sizeof(t_block));
 		if (block && block->magic_1 == 0x29a)
+		{
 			block->free = 1;
+			block->parent_page->capacity += block->size;
+			ft_bzero((void *)(char *)block + sizeof(t_block), block->size);
+		}
 	}
 }
 

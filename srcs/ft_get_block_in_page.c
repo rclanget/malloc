@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 18:23:16 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 17:31:19 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/22 18:21:15 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ t_block *ft_get_block_in_page(t_page *page, size_t size)
 {
 	t_block		*block;
 
-	block = (t_block *)((char *)page + page->offset + sizeof(t_page));
+	block = (t_block *)((void *)(char *)page + (page->offset + sizeof(t_page)));
 	block->magic_1 = 0x29a;
 	block->size = size;
 	block->parent_page = page;
 	block->next = page->blocks;
 	page->blocks = block;
-	page->capacity -= size + sizeof(t_block);
-	page->offset += size + sizeof(t_block);
+	page->capacity -= (size + sizeof(t_block));
+	page->offset += (size + sizeof(t_block));
 	return (block);
 }

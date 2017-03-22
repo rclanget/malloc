@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 19:00:08 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 19:50:28 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/22 19:26:11 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*ft_fusion_block(t_block *block, size_t size)
 		block->parent_page->capacity -= (size - save_size);
 		if (!block->next)
 			block->parent_page->offset += (size - save_size);
-		return ((char *)block + sizeof(t_block));
+		return ((void *)(char *)block + sizeof(t_block));
 	}
 	else
 		return (NULL);
@@ -40,17 +40,17 @@ static void	*ft_realloc(void *ptr, size_t size)
 	void	*new;
 	size_t	ptr_size;
 
-	if (!ptr)
+	if (!ptr || !*((char *)ptr))
 		return (ft_malloc(size));
 	block = (t_block *)(ptr - sizeof(t_block));
 	new = NULL;
 	if (block && (block->free || block->magic_1 != 0x29a))
 		return (NULL);
-	// if (size <= (size_t)SMALL_SIZE)
-	// {
-	// 	if ((size > (size_t)TINY_SIZE && block->parent_page->type != TINY) || size < (size_t)TINY_SIZE)
-	// 		new = ft_fusion_block(block, size);
-	// }
+	if (size <= (size_t)SMALL_SIZE)
+	{
+		if ((size > (size_t)TINY_SIZE && block->parent_page->type != TINY) || size < (size_t)TINY_SIZE)
+			new = ft_fusion_block(block, size);
+	}
 	if (!new)
 	{
 		new = ft_malloc(size);
@@ -75,11 +75,8 @@ void	*reallocf(void *ptr, size_t size)
 
 void	*realloc(void *ptr, size_t size)
 {
-	ft_print("realloc_in\n");
-
 	pthread_mutex_lock(&mutex);
 	ptr = ft_realloc(ptr, size);
 	pthread_mutex_unlock(&mutex);
-	ft_print("realloc_end\n");
 	return (ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 18:58:21 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 19:44:09 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/22 19:17:21 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct		s_malloc
 	t_page			*large;
 	t_page			*small;
 	t_page			*tiny;
-	t_block			*free_blocks;
 }					t_malloc;
 
 /*
@@ -86,7 +85,7 @@ void	ft_putnbr_fd(int n, int fd);
 void	ft_putchar_fd(char c, int fd);
 int ft_strlen(const char *str);
 
-
+void	print_adress(int base, unsigned long i);
 
 void *reallocf(void *ptr, size_t size);
 
@@ -113,11 +112,6 @@ void				*ft_get_free_block(t_type type, size_t size);
 *	show_alloc_mem.c
 */
 void				show_alloc_mem(void);
-
-/*
-*	realloc.c
-*/
-void				*calloc(size_t count, size_t size);
 
 /*
 *	realloc.c
