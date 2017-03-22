@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 19:00:08 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 19:26:11 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/22 20:36:39 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	*ft_realloc(void *ptr, size_t size)
 	void	*new;
 	size_t	ptr_size;
 
-	if (!ptr || !*((char *)ptr))
+	if (!ptr)
 		return (ft_malloc(size));
 	block = (t_block *)(ptr - sizeof(t_block));
 	new = NULL;
@@ -67,7 +67,7 @@ void	*reallocf(void *ptr, size_t size)
 
 	pthread_mutex_lock(&mutex);
 	new = ft_realloc(ptr, size);
-	if (!new)
+	if (!new && ptr)
 		ft_free(ptr);
 	pthread_mutex_unlock(&mutex);
 	return (new);
