@@ -6,11 +6,11 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 19:17:24 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 19:18:54 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:49:22 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_strlen(const char *str)
+int	ft_strlen(const char *str)
 {
 	int i;
 

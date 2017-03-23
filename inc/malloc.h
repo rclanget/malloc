@@ -6,17 +6,17 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 18:58:21 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 15:25:49 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:55:09 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
 
-#include <unistd.h>
-#include <pthread.h>
+# include <unistd.h>
+# include <pthread.h>
 
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 # define MMAP_FLAG		PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON
 # define PAGESIZE   	(getpagesize())
@@ -24,7 +24,7 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 # define TINY_SIZE		(PAGESIZE / 16)
 # define SMALL_SIZE 	(PAGESIZE / 4)
 
-struct					s_page;
+struct s_page;
 
 typedef enum			e_type
 {
@@ -40,7 +40,7 @@ typedef struct			s_block
 	char				free;
 	struct s_page		*parent_page;
 	struct s_block		*next;
-}					t_block;
+}						t_block;
 
 typedef struct			s_page
 {
@@ -60,80 +60,79 @@ typedef struct			s_malloc
 }						t_malloc;
 
 /*
-*	ft_memcpy.c
+** ft_memcpy.c
 */
 void					*ft_memcpy(void *dest, const void *src, size_t n);
 
 /*
-*	ft_bzero.c
+** ft_bzero.c
 */
 void					ft_bzero(void *p, size_t n);
 
-
 /*
-* ft_putstr_fd.c
+** ft_putstr_fd.c
 */
 void					ft_putstr_fd(char const *s, int fd);
 
 /*
-* ft_putnbr_fd.c
+** ft_putnbr_fd.c
 */
 void					ft_putnbr_fd(int n, int fd);
 
 /*
-* ft_putchar_fd.c
+** ft_putchar_fd.c
 */
 void					ft_putchar_fd(char c, int fd);
 
 /*
-* ft_strlen.c
+** ft_strlen.c
 */
-int 					ft_strlen(const char *str);
+int						ft_strlen(const char *str);
 
 /*
-*	ft_print.c
+** ft_print.c
 */
 int						ft_print(const char *fmt, ...);
 
 /*
-*	ft_singleton.c
+** ft_singleton.c
 */
 t_malloc				*ft_singleton(void);
 
 /*
-* 	ft_get_block_in_page.c
+** ft_get_block_in_page.c
 */
 t_block					*ft_get_block_in_page(t_page *page, size_t size);
 
 /*
-* 	ft_get_new_block.c
+** ft_get_new_block.c
 */
 void					*ft_get_new_block(t_type type, size_t size);
 
 /*
-* 	ft_get_free_block.c
+** ft_get_free_block.c
 */
 void					*ft_get_free_block(t_type type, size_t size);
 
 /*
-*	show_alloc_mem.c
+** show_alloc_mem.c
 */
 void					show_alloc_mem(void);
 
 /*
-*	realloc.c
+** realloc.c
 */
-void 					*reallocf(void *ptr, size_t size);
+void					*reallocf(void *ptr, size_t size);
 void					*realloc(void *ptr, size_t size);
 
 /*
-*	free.c
+** free.c
 */
 void					ft_free(void *ptr);
 void					free(void *ptr);
 
 /*
-*	malloc.c
+** malloc.c
 */
 void					*ft_malloc(size_t size);
 void					*malloc(size_t size);

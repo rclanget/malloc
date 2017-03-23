@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 17:36:16 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 15:16:41 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:53:34 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void		*ft_malloc(size_t size)
 	{
 		block = ft_get_new_block(LARGE, size);
 		if (block)
-			return ((void *)(char *)block + sizeof(t_block));	
+			return ((void *)(char *)block + sizeof(t_block));
 	}
 	else if (size > (size_t)TINY_SIZE)
 	{
@@ -53,8 +53,8 @@ void		*malloc(size_t size)
 {
 	void	*ptr;
 
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&g_mutex);
 	ptr = ft_malloc(size);
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&g_mutex);
 	return (ptr);
 }

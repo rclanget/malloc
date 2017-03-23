@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test4.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: byoung-w <byoung-w@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/08 14:49:06 by byoung-w          #+#    #+#             */
-/*   Updated: 2014/09/08 14:49:10 by byoung-w         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:55:41 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ int			main(void)
 	free((void *)addr + 5);
 	test = realloc((void *)addr + 5, 10);
 	if (test == NULL)
-	  print("Bonjours\n");
+		print("Bonjours\n");
 	return (0);
 }

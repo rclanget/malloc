@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 18:42:13 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 15:12:34 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:53:22 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void		ft_free(void *ptr)
 
 void		free(void *ptr)
 {
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&g_mutex);
 	ft_free(ptr);
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&g_mutex);
 }

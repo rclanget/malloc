@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 19:00:08 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 15:17:17 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:53:54 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static void	*ft_realloc(void *ptr, size_t size)
 		return (NULL);
 	if (size <= (size_t)SMALL_SIZE)
 	{
-		if ((size > (size_t)TINY_SIZE && block->parent_page->type != TINY) || size < (size_t)TINY_SIZE)
+		if ((size > (size_t)TINY_SIZE && block->parent_page->type != TINY) ||
+			size < (size_t)TINY_SIZE)
 			new = ft_fusion_block(block, size);
 	}
 	if (!new)
@@ -65,18 +66,18 @@ void		*reallocf(void *ptr, size_t size)
 {
 	void *new;
 
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&g_mutex);
 	new = ft_realloc(ptr, size);
 	if (!new && ptr)
 		ft_free(ptr);
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&g_mutex);
 	return (new);
 }
 
 void		*realloc(void *ptr, size_t size)
 {
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&g_mutex);
 	ptr = ft_realloc(ptr, size);
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&g_mutex);
 	return (ptr);
 }

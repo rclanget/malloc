@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 17:46:32 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 15:15:28 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 16:48:58 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ static t_page	*ft_get_new_page(t_type type)
 	if (type == TINY)
 	{
 		new->next = ft_singleton()->tiny;
-		ft_singleton()->tiny = new;		
+		ft_singleton()->tiny = new;
 	}
 	else
 	{
 		new->next = ft_singleton()->small;
-		ft_singleton()->small = new;		
+		ft_singleton()->small = new;
 	}
 	return (new);
 }
