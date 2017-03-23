@@ -6,11 +6,15 @@
 #    By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/08 20:12:26 by rclanget          #+#    #+#              #
-#    Updated: 2017/03/23 15:11:17 by rclanget         ###   ########.fr        #
+#    Updated: 2017/03/23 17:22:34 by rclanget         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	libft_malloc.so
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
+
+NAME		=	libft_malloc_$(HOSTTYPE).so
 
 IDIR		=	inc/
 
@@ -44,6 +48,7 @@ $(NAME): $(OBJ)
 		printf " -->> \033[32mCompilation Success: %s\033[0m             \n" "$@"|| \
 		printf " -->> \033[31mCompilation Failed: %s\033[0m              \n" "$@";
 	@export LD_LIBRARY_PATH=/home/zipo/workspace/malloc/
+	@ln -s libft_malloc_x86_64_Darwin.so libft_malloc.so
 
 %.o: %.c
 	@gcc $(FLAGS) -o $@ -c $< -I $(IDIR) && \
@@ -55,6 +60,7 @@ clean:
 
 fclean: clean
 	@/bin/rm -f $(NAME)
+	@/bin/rm -f libft_malloc.so
 
 re: fclean all
 
