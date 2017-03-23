@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 19:03:54 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 15:25:38 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 17:13:45 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ static int	show_all_blocks(t_block *block)
 	{
 		if (!block->free)
 		{
+			ft_print("0x");
 			print_adress(16, (long long int)((void *)block + sizeof(t_block)));
 			ft_print(" - ");
+			ft_print("0x");
 			print_adress(16,
 				(long long int)((void *)block + block->size + sizeof(t_block)));
 			ft_print(" : %d octets\n", block->size);
