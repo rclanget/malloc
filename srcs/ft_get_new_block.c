@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 17:46:32 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/23 16:48:58 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 17:09:37 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static t_page	*ft_get_new_large_page(size_t size)
 	new->type = LARGE;
 	new->size = round_size - sizeof(t_page);
 	new->capacity = round_size - sizeof(t_page);
-	new->offset = 0;
 	new->next = ft_singleton()->large;
 	ft_singleton()->large = new;
 	return (new);
