@@ -6,13 +6,48 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 18:42:13 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 20:54:03 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:12:34 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
+#include <sys/mman.h>
 
-void ft_free(void *ptr)
+static void	ft_remove_page(t_page *page)
+{
+	t_page *list;
+
+	if (page->type == LARGE)
+		list = ft_singleton()->large;
+	else if (page->type == SMALL)
+		list = ft_singleton()->small;
+	else
+		list = ft_singleton()->tiny;
+	while (list)
+	{
+		if (list->next && list->next == page)
+		{
+			list->next = list->next->next;
+			munmap(page, page->size + sizeof(t_page));
+			return ;
+		}
+		list = list->next;
+	}
+}
+
+static void	ft_page_update(t_page *page, size_t block_size)
+{
+	if (page)
+	{
+		page->capacity += block_size;
+		if ((page->capacity + sizeof(t_block)) == page->size)
+		{
+			ft_remove_page(page);
+		}
+	}
+}
+
+void		ft_free(void *ptr)
 {
 	t_block *block;
 
@@ -22,13 +57,12 @@ void ft_free(void *ptr)
 		if (block && block->magic_1 == 0x29a)
 		{
 			block->free = 1;
-			block->parent_page->capacity += block->size;
-			ft_bzero((void *)(char *)block + sizeof(t_block), block->size);
+			ft_page_update(block->parent_page, block->size);
 		}
 	}
 }
 
-void free(void *ptr)
+void		free(void *ptr)
 {
 	pthread_mutex_lock(&mutex);
 	ft_free(ptr);

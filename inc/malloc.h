@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 18:58:21 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 19:17:21 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:25:49 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MALLOC_H
 
 #include <unistd.h>
-
 #include <pthread.h>
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -25,109 +24,118 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 # define TINY_SIZE		(PAGESIZE / 16)
 # define SMALL_SIZE 	(PAGESIZE / 4)
 
-struct s_page;
+struct					s_page;
 
-typedef enum		e_type
+typedef enum			e_type
 {
 	TINY = 1,
 	SMALL = 2,
 	LARGE = 3
-}					t_type;
+}						t_type;
 
-typedef struct		s_block
+typedef struct			s_block
 {
-	int				magic_1; // 0x29a
-	size_t			size;
-	char			free;
-	struct s_page	*parent_page;
-	struct s_block	*next;
+	int					magic_1;
+	size_t				size;
+	char				free;
+	struct s_page		*parent_page;
+	struct s_block		*next;
 }					t_block;
 
-typedef struct		s_page
+typedef struct			s_page
 {
-	t_type			type;
-	size_t			size;
-	size_t			capacity;
-	size_t			offset;
-	t_block			*blocks;
-	struct s_page	*next;
-}					t_page;
+	t_type				type;
+	size_t				size;
+	size_t				capacity;
+	size_t				offset;
+	t_block				*blocks;
+	struct s_page		*next;
+}						t_page;
 
-typedef struct		s_malloc
+typedef struct			s_malloc
 {
-	t_page			*large;
-	t_page			*small;
-	t_page			*tiny;
-}					t_malloc;
+	t_page				*large;
+	t_page				*small;
+	t_page				*tiny;
+}						t_malloc;
 
 /*
 *	ft_memcpy.c
 */
-void				*ft_memcpy(void *dest, const void *src, size_t n);
+void					*ft_memcpy(void *dest, const void *src, size_t n);
 
 /*
 *	ft_bzero.c
 */
-void				ft_bzero(void *p, size_t n);
+void					ft_bzero(void *p, size_t n);
+
 
 /*
-*	ft_singleton.c
+* ft_putstr_fd.c
 */
-t_malloc			*ft_singleton(void);
+void					ft_putstr_fd(char const *s, int fd);
+
+/*
+* ft_putnbr_fd.c
+*/
+void					ft_putnbr_fd(int n, int fd);
+
+/*
+* ft_putchar_fd.c
+*/
+void					ft_putchar_fd(char c, int fd);
+
+/*
+* ft_strlen.c
+*/
+int 					ft_strlen(const char *str);
 
 /*
 *	ft_print.c
 */
-int					ft_print(const char *fmt, ...);
+int						ft_print(const char *fmt, ...);
 
-void	ft_putstr_fd(char const *s, int fd);
-void	ft_putnbr_fd(int n, int fd);
-void	ft_putchar_fd(char c, int fd);
-int ft_strlen(const char *str);
-
-void	print_adress(int base, unsigned long i);
-
-void *reallocf(void *ptr, size_t size);
-
-
-
-
+/*
+*	ft_singleton.c
+*/
+t_malloc				*ft_singleton(void);
 
 /*
 * 	ft_get_block_in_page.c
 */
-t_block				*ft_get_block_in_page(t_page *page, size_t size);
+t_block					*ft_get_block_in_page(t_page *page, size_t size);
 
 /*
 * 	ft_get_new_block.c
 */
-void				*ft_get_new_block(t_type type, size_t size);
+void					*ft_get_new_block(t_type type, size_t size);
 
 /*
 * 	ft_get_free_block.c
 */
-void				*ft_get_free_block(t_type type, size_t size);
+void					*ft_get_free_block(t_type type, size_t size);
 
 /*
 *	show_alloc_mem.c
 */
-void				show_alloc_mem(void);
+void					show_alloc_mem(void);
 
 /*
 *	realloc.c
 */
-void				*realloc(void *ptr, size_t size);
+void 					*reallocf(void *ptr, size_t size);
+void					*realloc(void *ptr, size_t size);
 
 /*
 *	free.c
 */
-void				ft_free(void *ptr);
-void				free(void *ptr);
+void					ft_free(void *ptr);
+void					free(void *ptr);
 
 /*
 *	malloc.c
 */
-void				*ft_malloc(size_t size);
-void				*malloc(size_t size);
+void					*ft_malloc(size_t size);
+void					*malloc(size_t size);
 
 #endif

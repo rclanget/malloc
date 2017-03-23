@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 19:03:54 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 15:36:30 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:25:38 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,7 @@
 
 #define HEX_STRING "0123456789abcdef"
 
-int		ft_unbrlen(uint64_t nbr, int base)
-{
-	return ((nbr > 0) ? 1 + ft_unbrlen(nbr / base, base) : 0);
-}
-
-void	print_adress(int base, unsigned long i)
+static void	print_adress(int base, unsigned long i)
 {
 	if (i < (unsigned long)base)
 		write(1, &HEX_STRING[i], 1);
@@ -31,9 +26,9 @@ void	print_adress(int base, unsigned long i)
 	}
 }
 
-int		show_all_blocks(t_block *block)
+static int	show_all_blocks(t_block *block)
 {
-	size_t total;
+	size_t	total;
 
 	total = 0;
 	while (block)
@@ -52,7 +47,7 @@ int		show_all_blocks(t_block *block)
 	return (total);
 }
 
-int	show_all_pages(t_page *pages)
+static int	show_all_pages(t_page *pages)
 {
 	size_t	total;
 
@@ -73,9 +68,9 @@ int	show_all_pages(t_page *pages)
 	return (total);
 }
 
-void	show_alloc_mem(void)
+void		show_alloc_mem(void)
 {
-	size_t total;
+	size_t	total;
 
 	total = show_all_pages(ft_singleton()->tiny);
 	total += show_all_pages(ft_singleton()->small);

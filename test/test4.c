@@ -29,6 +29,6 @@ int			main(void)
 	free((void *)addr + 5);
 	test = realloc((void *)addr + 5, 10);
 	if (test == NULL)
-		print("Bonjours\n");
+	  print("Bonjours\n");
 	return (0);
 }

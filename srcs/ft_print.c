@@ -6,14 +6,14 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/30 11:26:21 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/21 19:14:42 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:05:12 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #include <stdarg.h>
 
-void		run_print(int fd, const char *fmt, va_list list)
+static void	run_print(int fd, const char *fmt, va_list list)
 {
 	while (*fmt)
 	{

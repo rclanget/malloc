@@ -6,7 +6,7 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 17:36:16 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 20:25:50 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:16:41 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-void *ft_malloc_page(t_type type, size_t size)
+static void	*ft_malloc_page(t_type type, size_t size)
 {
-	t_block *block;
+	t_block	*block;
 
 	block = ft_get_free_block(type, size);
 	if (block == NULL)
@@ -24,9 +24,9 @@ void *ft_malloc_page(t_type type, size_t size)
 	return (block);
 }
 
-void *ft_malloc(size_t size)
+void		*ft_malloc(size_t size)
 {
-	t_block *block;
+	t_block	*block;
 
 	if (size > (size_t)SMALL_SIZE)
 	{
@@ -49,9 +49,9 @@ void *ft_malloc(size_t size)
 	return (NULL);
 }
 
-void *malloc(size_t size)
+void		*malloc(size_t size)
 {
-	void *ptr;
+	void	*ptr;
 
 	pthread_mutex_lock(&mutex);
 	ptr = ft_malloc(size);

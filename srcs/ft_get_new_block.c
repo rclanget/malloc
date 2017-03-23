@@ -6,17 +6,17 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 17:46:32 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 19:26:23 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:15:28 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #include <sys/mman.h>
 
-t_page *ft_get_new_large_page(size_t size)
+static t_page	*ft_get_new_large_page(size_t size)
 {
-	size_t round_size;
-	t_page *new;
+	size_t		round_size;
+	t_page		*new;
 
 	round_size = ROUNDUP(size + sizeof(t_page) + sizeof(t_block));
 	new = (t_page *)mmap(0, round_size, MMAP_FLAG, -1, 0);
@@ -32,11 +32,11 @@ t_page *ft_get_new_large_page(size_t size)
 	return (new);
 }
 
-t_page *ft_get_new_page(t_type type)
+static t_page	*ft_get_new_page(t_type type)
 {
-	size_t size;
-	size_t round_size;
-	t_page *new;
+	size_t		size;
+	size_t		round_size;
+	t_page		*new;
 
 	size = ((type == TINY ? TINY_SIZE : SMALL_SIZE) + sizeof(t_block)) * 100;
 	round_size = ROUNDUP(size + sizeof(t_page));
@@ -60,12 +60,10 @@ t_page *ft_get_new_page(t_type type)
 	return (new);
 }
 
-void *ft_get_new_block(t_type type, size_t size)
+void			*ft_get_new_block(t_type type, size_t size)
 {
-	t_page *new_page;
-	t_block *new_block;
-
-	(void)type;
+	t_page		*new_page;
+	t_block		*new_block;
 
 	new_block = NULL;
 	if (type == LARGE)

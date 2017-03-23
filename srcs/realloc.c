@@ -6,13 +6,13 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 19:00:08 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 20:36:39 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:17:17 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	*ft_fusion_block(t_block *block, size_t size)
+static void	*ft_fusion_block(t_block *block, size_t size)
 {
 	t_block	*next;
 	size_t	save_size;
@@ -61,7 +61,7 @@ static void	*ft_realloc(void *ptr, size_t size)
 	return (new);
 }
 
-void	*reallocf(void *ptr, size_t size)
+void		*reallocf(void *ptr, size_t size)
 {
 	void *new;
 
@@ -73,7 +73,7 @@ void	*reallocf(void *ptr, size_t size)
 	return (new);
 }
 
-void	*realloc(void *ptr, size_t size)
+void		*realloc(void *ptr, size_t size)
 {
 	pthread_mutex_lock(&mutex);
 	ptr = ft_realloc(ptr, size);

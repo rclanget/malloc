@@ -6,13 +6,13 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 18:23:16 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 20:32:00 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:12:55 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_block *ft_get_block_in_page(t_page *page, size_t size)
+t_block	*ft_get_block_in_page(t_page *page, size_t size)
 {
 	t_block		*block;
 

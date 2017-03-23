@@ -6,42 +6,43 @@
 /*   By: rclanget <rclanget@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 17:44:00 by rclanget          #+#    #+#             */
-/*   Updated: 2017/03/22 21:01:57 by rclanget         ###   ########.fr       */
+/*   Updated: 2017/03/23 15:14:16 by rclanget         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_block *ft_get_free_block_in_list(t_type type, size_t size)
+static t_block	*ft_get_free_block_in_list(t_type type, size_t size)
 {
-	t_page *page;
-	t_block	*block;
+	t_page		*page;
+	t_block		*block;
 
 	page = (type == TINY ? ft_singleton()->tiny : ft_singleton()->small);
-	block = 0;
-	while (page && page->capacity < (size + sizeof(t_block)))
-		page = page->next;
-	if (page)
+	while (page)
 	{
-		block = page->blocks;
-		while (block)
+		if (page->capacity > (size + sizeof(t_block)))
 		{
-			if (block->free && block->size >= (size + sizeof(t_block)))
+			block = page->blocks;
+			while (block)
 			{
-				block->free = 0;
-				block->parent_page->capacity -= block->size;
-				return (block);
+				if (block->free && block->size >= size)
+				{
+					block->free = 0;
+					block->parent_page->capacity -= block->size;
+					return (block);
+				}
+				block = block->next;
 			}
-			block = block->next;
 		}
+		page = page->next;
 	}
-	return (block);
+	return (NULL);
 }
 
-t_block *ft_get_free_block_in_pages(t_type type, size_t size)
+static t_block	*ft_get_free_block_in_pages(t_type type, size_t size)
 {
-	t_page *page;
-	t_block	*block;
+	t_page		*page;
+	t_block		*block;
 
 	page = (type == TINY ? ft_singleton()->tiny : ft_singleton()->small);
 	block = NULL;
@@ -52,9 +53,9 @@ t_block *ft_get_free_block_in_pages(t_type type, size_t size)
 	return (block);
 }
 
-void *ft_get_free_block(t_type type, size_t size)
+void			*ft_get_free_block(t_type type, size_t size)
 {
-	t_block *block;
+	t_block		*block;
 
 	block = ft_get_free_block_in_list(type, size);
 	if (block == NULL)
